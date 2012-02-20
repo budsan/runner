@@ -8,8 +8,8 @@
 #include "enginestate.h"
 #include "keys.h"
 
-#define GAME_NAME "Climbers"
-#define GAME_VERSION "0.1"
+#define GAME_NAME "Runner"
+#define GAME_VERSION "1337"
 
 Runner::Runner()
 {

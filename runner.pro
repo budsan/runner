@@ -1,4 +1,7 @@
 include(gameframework/gameframework.pri)
+
+INCLUDEPATH += gameframework/
+
 TARGET = runner
 
 SOURCES += \
