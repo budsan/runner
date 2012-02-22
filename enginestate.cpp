@@ -21,7 +21,8 @@ void EngineState::Update(float GameTime)
 
 void EngineState::Load()
 {
-	camera.resizeScreen(200);
+	camera.Init();
+	camera.setZoom(2);
 	player.Load();
 
 	if (emitter == nullptr) {
@@ -50,14 +51,9 @@ void EngineState::Draw()
 	screen.FillWithColor(rgba(0.5, 0.5 ,0.5, 1));
 
 	camera.setPos(math::vec2f(0,0));
-	camera.setOpenGLMatrices();
+	camera.updateOpenGLMatrices();
 
-	if (emitter != nullptr) {
-		emitter->Draw();
-	}
-
-	if (player.Loaded()) {
-		player.Draw();
-	}
+	if (emitter != nullptr) emitter->Draw();
+	if (player.Loaded()) player.Draw();
 }
 

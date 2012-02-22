@@ -48,7 +48,7 @@ void Runner::Load()
 		LOG << "ERROR: Loading frames font" << std::endl;
 	}
 
-	frames.setColor(rgba(1,1,0.2,1));
+	frames.setColor(rgba(1,1,1,1));
 }
 
 void Runner::Unload()
