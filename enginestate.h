@@ -1,12 +1,10 @@
 #pragma once
 
 #include "gameframework/gamestate.h"
-#include "gameframework/graphics/spriteanim.h"
 #include "gameframework/graphics/camera2d.h"
 
-#include "gameframework/tools/particleemitter.h"
-
-#include "player.h"
+#include "logic/player.h"
+#include "logic/runnertilemap.h"
 
 class EngineState : public GameState
 {
@@ -14,16 +12,15 @@ public:
 	 EngineState();
 	~EngineState();
 
-	void Update(float GameTime);
-	void Draw();
+	void update(float deltaTime);
+	void draw();
 	
-	void Load();
-	void Unload();
+	void load();
+	void unload();
 
 private:
 
 	Camera2D camera;
+	RunnerTilemap tilemap;
 	Player player;
-	ParticleEmitter *emitter;
 };
-

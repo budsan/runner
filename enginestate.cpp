@@ -5,55 +5,40 @@
 #include "gameframework/graphics/graphics.h"
 #include "gameframework/graphics/screen.h"
 
-EngineState:: EngineState() : emitter(nullptr) {}
+EngineState:: EngineState() : tilemap(16), player(tilemap) {}
 EngineState::~EngineState() {}
 
-void EngineState::Update(float GameTime)
+void EngineState::update(float deltaTime)
 {
-	if (player.Loaded()) {
-		player.Update(GameTime);
-	}
-
-	if (emitter != nullptr) {
-		emitter->Update(GameTime);
-	}
+	if (player.loaded()) player.update(deltaTime);
 }
 
-void EngineState::Load()
+void EngineState::load()
 {
-	camera.Init();
+	camera.init();
 	camera.setZoom(2);
-	player.Load();
-
-	if (emitter == nullptr) {
-		emitter = new ParticleEmitter();
-		if (!emitter->Load("data/scripts/runner_dust.emp")) {
-			delete emitter;
-			emitter = nullptr;
-		}
-	}
-
-
+	player.load();
 }
 
-void EngineState::Unload()
+void EngineState::unload()
 {
 
 }
 
-void EngineState::Draw()
+void EngineState::draw()
 {
 	glDisable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	Screen &screen = Screen::Instance();
-	screen.FillWithColor(rgba(0.5, 0.5 ,0.5, 1));
+	Screen &screen = Screen::instance();
+	screen.fillWithColor(rgba(0.5, 0.5 ,0.5, 1));
 
 	camera.setPos(math::vec2f(0,0));
-	camera.updateOpenGLMatrices();
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf(camera.getProjectionMatrix().v);
 
-	if (emitter != nullptr) emitter->Draw();
-	if (player.Loaded()) player.Draw();
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixf(camera.getModelviewMatrix().v);
+
+	if (player.loaded()) player.draw();
 }
 

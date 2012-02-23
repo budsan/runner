@@ -8,14 +8,23 @@ SOURCES += \
     enginestate.cpp \
     main.cpp \
     runner.cpp \
-    player.cpp
+    logic/tilemapcharacter.cpp \
+    logic/tilemap.cpp \
+    logic/player.cpp \
+    logic/runnertilemap.cpp
 
     
 HEADERS += \
     enginestate.h \
     runner.h \
     keys.h \
-    player.h
+    logic/tilemapcharacter.h \
+    logic/tilemap.h \
+    logic/player.h \
+    logic/runnertilemap.h
+
+
+
 
 
 

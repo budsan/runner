@@ -26,24 +26,24 @@ const char *Runner::getVersion()
     return GAME_VERSION;
 }
 
-void Runner::Configure()
+void Runner::configure()
 {
 	setFramesPerSecond(0);
-	setStableGameTime(false);
-	ChangeState(new EngineState());
+	setStableDeltaTime(false);
+	changeState(new EngineState());
 
 	Keybinds k(NUMPLAYERS, K_SIZE);
 	k[0][K_JUMP ].setDefault(SDLK_UP);
 
-	mySettings->setKeybinds(k);
-	mySettings->get("ScreenWidth" )->set(800);
-	mySettings->get("ScreenHeight")->set(600);
-	mySettings->get("Fullscreen"  )->set(false);
+	m_settings->setKeybinds(k);
+	m_settings->get("ScreenWidth" )->set(800);
+	m_settings->get("ScreenHeight")->set(600);
+	m_settings->get("Fullscreen"  )->set(false);
 }
 
-void Runner::Load()
+void Runner::load()
 {
-	if (!frames.LoadFont("data/font/nibby.ttf"))
+	if (!frames.loadFont("data/font/nibby.ttf"))
 	{
 		LOG << "ERROR: Loading frames font" << std::endl;
 	}
@@ -51,19 +51,19 @@ void Runner::Load()
 	frames.setColor(rgba(1,1,1,1));
 }
 
-void Runner::Unload()
+void Runner::unload()
 {
 
 }
 
-void Runner::Update(float GameTime)
+void Runner::update(float deltaTime)
 {
-	frames.Update(GameTime);
+	frames.update(deltaTime);
 }
 
-void Runner::Draw()
+void Runner::draw()
 {
-	frames.Draw();
+	frames.draw();
 }
 
 
