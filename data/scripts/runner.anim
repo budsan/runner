@@ -7,4 +7,6 @@ ANIM "Jump" "runner" 0
 96 0 32 32 16 32 100
 ANIM "Fall" "runner" 0
 128 0 32 32 16 32 100
-
+ANIM "Dash" "runner" 0
+160 0 32 32 16 32 100
+192 0 32 32 16 32 100

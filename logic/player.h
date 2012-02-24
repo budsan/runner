@@ -24,9 +24,13 @@ private:
 	static std::unique_ptr<ParticleEmitter> s_runEmitter;
 	static std::unique_ptr<ParticleEmitter> s_airJumpEmitter;
 	static ALuint s_sndJump;
+	static ALuint s_sndAirJump;
+	static ALuint s_sndDash;
+	static ALuint s_sndRun;
 
 	bool m_init;
 	bool m_grounded;
+	bool m_dashing;
 	int m_airJumpLeft;
 	float m_jumpTimeLeft;
 	float m_dashTimeLeft;

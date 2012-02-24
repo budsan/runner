@@ -21,7 +21,7 @@ protected:
 	math::vec2f m_velLim;
 	float m_animVelFactor;
 
-	void ensureAnim(std::string name);
+	bool ensureAnim(std::string name);
 
 	virtual void noLeftCollision();
 	virtual void noRightCollision();

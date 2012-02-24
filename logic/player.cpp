@@ -13,12 +13,17 @@ std::unique_ptr<emyl::sound> Player::s_sndHdl = nullptr;
 std::unique_ptr<ParticleEmitter> Player::s_runEmitter = nullptr;
 std::unique_ptr<ParticleEmitter> Player::s_airJumpEmitter = nullptr;
 ALuint Player::s_sndJump = 0;
+ALuint Player::s_sndAirJump = 0;
+ALuint Player::s_sndDash = 0;
+ALuint Player::s_sndRun = 0;
+
 
 
 Player::Player(Tilemap &parent) : TilemapCharacter(parent), m_runEmitter(nullptr)
 {
 	m_jumpTimeLeft = 0.0f;
 	m_init = false;
+	m_dashing = false;
 }
 
 void Player::load()
@@ -52,8 +57,12 @@ void Player::load()
 		s_sndHdl->set_source();
 	}
 
+
 	emyl::manager* audiomng = emyl::manager::get_instance();
 	if (s_sndJump == 0) s_sndJump = audiomng->get_buffer("data/sound/jump.ogg");
+	if (s_sndAirJump == 0) s_sndAirJump = audiomng->get_buffer("data/sound/airjump.ogg");
+	if (s_sndRun  == 0) s_sndRun  = audiomng->get_buffer("data/sound/running.ogg");
+	if (s_sndDash  == 0) s_sndDash  = audiomng->get_buffer("data/sound/running.ogg");
 }
 
 bool Player::loaded()
@@ -80,13 +89,21 @@ void Player::update(float deltaTime)
 	const math::vec2f vel_run( 300,  800);
 	const math::vec2f vel_jmp(   0,  300);
 	const float jump_time = 0.2f;
+	const float dash_time = 1.0f;
 
 	if (m_grounded) {
-		ensureAnim("Run");
+		if(ensureAnim("Run")) s_sndHdl->play_buffer(s_sndRun, 1);
 	}
 	else {
-		if (m_vel.y > 0) ensureAnim("Jump");
-		else ensureAnim("Fall");
+		if (m_dashing)
+		{
+			ensureAnim("Dash");
+		}
+		else
+		{
+			if (m_vel.y > 0) ensureAnim("Jump");
+			else ensureAnim("Fall");
+		}
 	}
 
 	m_acc = math::vec2f(0,0);
@@ -98,25 +115,51 @@ void Player::update(float deltaTime)
 	{
 		if (m_grounded)
 		{
-			s_sndHdl->play_buffer(s_sndJump);
+			s_sndHdl->play_buffer(s_sndJump, 0);
 			m_jumpTimeLeft = jump_time;
+			m_dashTimeLeft = dash_time;
 			m_airJumpLeft = 1;
+
 		}
 		else if (m_airJumpLeft > 0)
 		{
+			s_sndHdl->play_buffer(s_sndAirJump, 0);
 			m_airJumpLeft--;
 			m_jumpTimeLeft = jump_time;
+			m_dashTimeLeft = dash_time;
+			m_dashing = false;
+
 			m_airJumpEmitter->restart();
 			m_airJumpEmitter->setPosition(Sprite::pos());
 		}
 	}
 
-	if (state.getKeyState(K_JUMP) && m_jumpTimeLeft > 0)
-		m_vel.y = vel_jmp.y;
-	else m_jumpTimeLeft = 0;
+	if ( state.getKeyDown (K_DASH) && !m_grounded)
+	{
+		s_sndHdl->play_buffer(s_sndDash, 1);
+		m_dashing = true;
+	}
+	if (!state.getKeyState(K_DASH) || m_dashTimeLeft <= 0)
+	{
+		if (m_dashing) s_sndHdl->stop();
+		m_dashing = false;
+	}
 
-	if (m_jumpTimeLeft <= 0) m_acc += gra_acc; //La gravedad afecta mientras no salte
-	else m_jumpTimeLeft -= deltaTime; //Se le resta el tiempo mientras salta
+	if (m_dashing)
+	{
+		m_vel.y = 0;
+		if (m_dashTimeLeft <= 0) m_acc += gra_acc;
+		else m_dashTimeLeft -= deltaTime;
+	}
+	else
+	{
+		if (state.getKeyState(K_JUMP) && m_jumpTimeLeft > 0)
+			m_vel.y = vel_jmp.y;
+		else m_jumpTimeLeft = 0;
+
+		if (m_jumpTimeLeft <= 0) m_acc += gra_acc;
+		else m_jumpTimeLeft -= deltaTime;
+	}
 
 	TilemapCharacter::update(deltaTime);
 
@@ -125,21 +168,19 @@ void Player::update(float deltaTime)
 		if (s_runEmitter != nullptr)
 			m_runEmitter = std::unique_ptr<ParticleEmitter>(new ParticleEmitter(*s_runEmitter));
 	}
-	else
-	{
+	else {
 		m_runEmitter->update(deltaTime);
 	}
 
-	if (m_runEmitter != nullptr)
-	{
+	if (m_runEmitter != nullptr) {
 		m_runEmitter->setPosition(Sprite::pos());
-		if (m_grounded) m_runEmitter->setParticleNumber(-1);
+		if (m_lastAnim == "Run") m_runEmitter->setParticleNumber(-1);
 		else m_runEmitter->setParticleNumber(0);
+
 		m_runEmitter->update(deltaTime);
 	}
 
-	if (m_airJumpEmitter != nullptr)
-	{
+	if (m_airJumpEmitter != nullptr) {
 		m_airJumpEmitter->update(deltaTime);
 	}
 }
@@ -210,6 +251,8 @@ void Player::reset()
 {
 	m_init = true;
 	m_vel = math::vec2f(0,0);
+	m_dashing = false;
+
 	if (s_sprData != nullptr) {
 		TilemapCharacter::setAnimData(s_sprData);
 		TilemapCharacter::ensureAnim("Run");

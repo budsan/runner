@@ -172,7 +172,7 @@ bool TilemapCharacter::onRightCollision(int x, int j){return true;}
 bool TilemapCharacter::onUpCollision(int x, int j)   {return true;}
 bool TilemapCharacter::onDownCollision(int x, int j) {return true;}
 
-void TilemapCharacter::ensureAnim(std::string name)
+bool TilemapCharacter::ensureAnim(std::string name)
 {
 	if (name != m_lastAnim)
 	{
@@ -185,7 +185,10 @@ void TilemapCharacter::ensureAnim(std::string name)
 		siz.y = params.h;
 		cen.x = params.cx;
 		cen.y = params.cy;
+		return true;
 	}
+
+	return false;
 }
 
 void TilemapCharacter::preDrawing()

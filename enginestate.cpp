@@ -15,8 +15,7 @@ void EngineState::update(float deltaTime)
 
 void EngineState::load()
 {
-	camera.init();
-	camera.setZoom(1.5);
+	camera.resizeScreen(400);
 	player.load();
 }
 
