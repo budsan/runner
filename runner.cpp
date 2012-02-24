@@ -33,7 +33,8 @@ void Runner::configure()
 	changeState(new EngineState());
 
 	Keybinds k(NUMPLAYERS, K_SIZE);
-	k[0][K_JUMP ].setDefault(SDLK_UP);
+	k[0][K_JUMP].setDefault(SDLK_UP);
+	k[0][K_DASH].setDefault(SDLK_RIGHT);
 
 	m_settings->setKeybinds(k);
 	m_settings->get("ScreenWidth" )->set(800);

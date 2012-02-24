@@ -12,7 +12,7 @@ RunnerTilemap::RunnerTilemap(float unitsPerTile) : Tilemap(unitsPerTile)
 {
 }
 
-void RunnerTilemap::Init(int seed, int wide)
+void RunnerTilemap::init(int seed, int wide)
 {
 	sizes = math::vec2i(wide, 40);
 	this->seed = seed;
@@ -36,11 +36,10 @@ void RunnerTilemap::setColl(int x, int y, bool col)
 
 bool RunnerTilemap::isColl(int x, int y)
 {
+	if ( y == -2 && (x%32) == 0) return false;
 	if ( y < 0 ) return true;
-	if ( x < 0  || x >= sizes.x ) return false;
-	testRowY(y);
 
-	return get(x, y%sizes.y);
+	return false;
 }
 
 void RunnerTilemap::update(float deltaTime)
@@ -48,14 +47,13 @@ void RunnerTilemap::update(float deltaTime)
 	updateDeletedTiles(deltaTime);
 }
 
-void RunnerTilemap::Draw(const math::bbox2f &screen)
+void RunnerTilemap::draw(const math::bbox2f &screen)
 {
 	math::vec2i start = tilePos(screen.min);
 	math::vec2i end   = tilePos(screen.max) + math::vec2i(1,1);
 
 	for (int j = start.y; j < end.y; ++j)
 	{
-		drawDeletedTiles(j);
 		for (int i = start.x; i < end.x; ++i)
 		{
 			math::bbox2f quad(
@@ -64,8 +62,8 @@ void RunnerTilemap::Draw(const math::bbox2f &screen)
 
 			if (isColl(i,j))
 			{
-					glColor(rgb(0.400f, 0.275f, 0.195f));
-					draw(quad);
+					glColor(rgb(0, 0, 0));
+					::draw(quad);
 			}
 		}
 	}

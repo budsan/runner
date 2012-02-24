@@ -10,15 +10,15 @@
 
 std::shared_ptr<SpriteAnimData> Player::s_sprData = nullptr;
 std::unique_ptr<emyl::sound> Player::s_sndHdl = nullptr;
+std::unique_ptr<ParticleEmitter> Player::s_runEmitter = nullptr;
+std::unique_ptr<ParticleEmitter> Player::s_airJumpEmitter = nullptr;
 ALuint Player::s_sndJump = 0;
 
 
-Player::Player(Tilemap &parent) : TilemapCharacter(parent)
+Player::Player(Tilemap &parent) : TilemapCharacter(parent), m_runEmitter(nullptr)
 {
-	if (s_sprData == nullptr) load();
-	SpriteAnim::setAnimData(s_sprData[player]);
-	SpriteAnim::ensureAnim("Run");
 	m_jumpTimeLeft = 0.0f;
+	m_init = false;
 }
 
 void Player::load()
@@ -27,17 +27,22 @@ void Player::load()
 	{
 		s_sprData = std::shared_ptr<SpriteAnimData> (new SpriteAnimData());
 		if (!s_sprData->load("data/scripts/runner.anim")) {
-			delete s_sprData;
-			s_sprData = nullptr;
+			s_sprData.reset();
 			//LOG << "CRITICAL: data/scripts/mario01.anim doesn't exist." << std::endl;
 		}
 	}
 
-	if (emitter == nullptr) {
-		emitter = std::unique_ptr<ParticleEmitter>(new ParticleEmitter());
-		if (!emitter->load("data/scripts/runner_dust.emp")) {
-			delete emitter;
-			emitter = nullptr;
+	if (s_runEmitter == nullptr) {
+		s_runEmitter = std::unique_ptr<ParticleEmitter>(new ParticleEmitter());
+		if (!s_runEmitter->load("data/scripts/runner_dust.emp")) {
+			s_runEmitter.reset();
+		}
+	}
+
+	if (s_airJumpEmitter == nullptr) {
+		s_airJumpEmitter = std::unique_ptr<ParticleEmitter>(new ParticleEmitter());
+		if (!s_airJumpEmitter->load("data/scripts/runner_airjump.emp")) {
+			s_airJumpEmitter.reset();
 		}
 	}
 
@@ -58,36 +63,28 @@ bool Player::loaded()
 
 void Player::unload()
 {
-	if (s_sprData[0] != nullptr)
-	{
-		delete s_sprData[0];
-		s_sprData[0] = nullptr;
-	}
+	s_sprData.reset();
+	s_sprData.reset();
+	s_sndHdl.reset();
 
-	if (s_sprData[1] != nullptr)
-	{
-		delete s_sprData[1];
-		s_sprData[1] = nullptr;
-	}
-
-	if (s_sndHdl != nullptr)
-	{
-		delete s_sndHdl;
-		s_sndHdl = nullptr;
-	}
+	s_runEmitter.reset();
+	s_airJumpEmitter.reset();
 }
 
 void Player::update(float deltaTime)
 {
-	InputState state = Input::Instance().getInputState(player);
-	const math::vec2f gra_acc(   0 -1200);
-	const math::vec2f vel_run( 300,  300);
-	const math::vec2f vel_jmp( 300,  300);
-	const float jump_time = 0.3f;
+	if (!m_init) reset();
 
-	if (m_grounded) ensureAnim("Run");
-	else
-	{
+	InputState state = Input::Instance().getInputState(0);
+	const math::vec2f gra_acc(   0 -1200);
+	const math::vec2f vel_run( 300,  800);
+	const math::vec2f vel_jmp(   0,  300);
+	const float jump_time = 0.2f;
+
+	if (m_grounded) {
+		ensureAnim("Run");
+	}
+	else {
 		if (m_vel.y > 0) ensureAnim("Jump");
 		else ensureAnim("Fall");
 	}
@@ -97,10 +94,21 @@ void Player::update(float deltaTime)
 	m_velLim = vel_run;
 	m_vel.x = vel_run.x;
 
-	if ( state.getKeyDown(K_JUMP) && m_grounded)
+	if ( state.getKeyDown(K_JUMP))
 	{
-		s_sndHdl->play_buffer(s_sndJump);
-		m_jumpTimeLeft = jump_time;
+		if (m_grounded)
+		{
+			s_sndHdl->play_buffer(s_sndJump);
+			m_jumpTimeLeft = jump_time;
+			m_airJumpLeft = 1;
+		}
+		else if (m_airJumpLeft > 0)
+		{
+			m_airJumpLeft--;
+			m_jumpTimeLeft = jump_time;
+			m_airJumpEmitter->restart();
+			m_airJumpEmitter->setPosition(Sprite::pos());
+		}
 	}
 
 	if (state.getKeyState(K_JUMP) && m_jumpTimeLeft > 0)
@@ -112,7 +120,28 @@ void Player::update(float deltaTime)
 
 	TilemapCharacter::update(deltaTime);
 
-	if (emitter != nullptr) emitter->update(deltaTime);
+	if (m_runEmitter == nullptr)
+	{
+		if (s_runEmitter != nullptr)
+			m_runEmitter = std::unique_ptr<ParticleEmitter>(new ParticleEmitter(*s_runEmitter));
+	}
+	else
+	{
+		m_runEmitter->update(deltaTime);
+	}
+
+	if (m_runEmitter != nullptr)
+	{
+		m_runEmitter->setPosition(Sprite::pos());
+		if (m_grounded) m_runEmitter->setParticleNumber(-1);
+		else m_runEmitter->setParticleNumber(0);
+		m_runEmitter->update(deltaTime);
+	}
+
+	if (m_airJumpEmitter != nullptr)
+	{
+		m_airJumpEmitter->update(deltaTime);
+	}
 }
 
 void Player::preDrawing()
@@ -126,7 +155,8 @@ void Player::preDrawing()
 void Player::postDrawing()
 {
 	TilemapCharacter::postDrawing();
-	if (emitter != nullptr) emitter->draw();	
+	if (m_runEmitter != nullptr) m_runEmitter->draw();
+	if (m_airJumpEmitter != nullptr) m_airJumpEmitter->draw();
 }
 
 void Player::noLeftCollision()
@@ -178,5 +208,20 @@ bool Player::onDownCollision(int x, int j)
 
 void Player::reset()
 {
+	m_init = true;
 	m_vel = math::vec2f(0,0);
+	if (s_sprData != nullptr) {
+		TilemapCharacter::setAnimData(s_sprData);
+		TilemapCharacter::ensureAnim("Run");
+	}
+
+	if (m_runEmitter == nullptr) {
+		if (s_runEmitter != nullptr)
+			m_runEmitter = std::unique_ptr<ParticleEmitter>(new ParticleEmitter(*s_runEmitter));
+	}
+
+	if (m_airJumpEmitter == nullptr) {
+		if (s_airJumpEmitter != nullptr)
+			m_airJumpEmitter = std::unique_ptr<ParticleEmitter>(new ParticleEmitter(*s_airJumpEmitter));
+	}
 }

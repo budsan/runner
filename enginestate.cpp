@@ -16,7 +16,7 @@ void EngineState::update(float deltaTime)
 void EngineState::load()
 {
 	camera.init();
-	camera.setZoom(2);
+	camera.setZoom(1.5);
 	player.load();
 }
 
@@ -32,12 +32,15 @@ void EngineState::draw()
 	Screen &screen = Screen::instance();
 	screen.fillWithColor(rgba(0.5, 0.5 ,0.5, 1));
 
-	camera.setPos(math::vec2f(0,0));
+	camera.setPos(math::vec2f(player.pos().x+64, 128));
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf(camera.getProjectionMatrix().v);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(camera.getModelviewMatrix().v);
+
+	auto frustrum = camera.getBounding();
+	tilemap.draw(frustrum);
 
 	if (player.loaded()) player.draw();
 }
