@@ -92,6 +92,7 @@ void Player::update(float deltaTime)
 	const float dash_time = 1.0f;
 
 	if (m_grounded) {
+        m_airJumpLeft = 1;
 		if(ensureAnim("Run")) s_sndHdl->play_buffer(s_sndRun, 1);
 	}
 	else {
@@ -118,7 +119,6 @@ void Player::update(float deltaTime)
 			s_sndHdl->play_buffer(s_sndJump, 0);
 			m_jumpTimeLeft = jump_time;
 			m_dashTimeLeft = dash_time;
-			m_airJumpLeft = 1;
 
 		}
 		else if (m_airJumpLeft > 0)
@@ -250,6 +250,7 @@ bool Player::onDownCollision(int x, int j)
 void Player::reset()
 {
 	m_init = true;
+    m_pos = math::vec2f(0,0);
 	m_vel = math::vec2f(0,0);
 	m_dashing = false;
 

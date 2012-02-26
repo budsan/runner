@@ -1,6 +1,6 @@
 #include "enginestate.h"
 
-#include <fstream>
+#include <time.h>
 
 #include "gameframework/graphics/graphics.h"
 #include "gameframework/graphics/screen.h"
@@ -17,6 +17,8 @@ void EngineState::load()
 {
 	camera.resizeScreen(400);
 	player.load();
+    player.reset();
+    tilemap.init(time(0));
 }
 
 void EngineState::unload()
