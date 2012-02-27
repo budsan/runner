@@ -84,86 +84,98 @@ void Player::unload()
 
 void Player::update(float deltaTime)
 {
+	static const math::vec2f gra_acc(   0 -1200);
+	static const math::vec2f vel_run( 300,  800);
+	static const math::vec2f vel_jmp(   0,  300);
+	static const float jump_time = 0.2f;
+	static const float dash_time = 0.5f;
+
 	if (!m_init) reset();
 
-	InputState state = Input::Instance().getInputState(0);
-	const math::vec2f gra_acc(   0 -1200);
-	const math::vec2f vel_run( 300,  800);
-	const math::vec2f vel_jmp(   0,  300);
-	const float jump_time = 0.2f;
-	const float dash_time = 0.5f;
-
-	if (m_grounded) {
-		m_airJumpLeft = 1;
-		m_groundedTime += deltaTime;
-		if(ensureAnim("Run")) s_sndHdl->play_buffer(s_sndRun, 1);
-	}
-	else {
-		m_groundedTime = 0;
-		if (m_dashing)
-		{
-			ensureAnim("Dash");
-		}
-		else
-		{
-			if (m_vel.y > 0) ensureAnim("Jump");
-			else ensureAnim("Fall");
-		}
-	}
-
-	m_acc = math::vec2f(0,0);
-	m_fri = math::vec2f(0,0);
-	m_velLim = vel_run;
-	m_vel.x = vel_run.x;
-
-	if ( state.getKeyDown(K_JUMP))
-	{
-		if (m_grounded)
-		{
-			s_sndHdl->play_buffer(s_sndJump, 0);
-			m_jumpTimeLeft = jump_time;
-			m_dashTimeLeft = dash_time;
-
-		}
-		else if (m_airJumpLeft > 0)
-		{
-			s_sndHdl->play_buffer(s_sndAirJump, 0);
-			m_airJumpLeft--;
-			m_jumpTimeLeft = jump_time;
-			m_dashTimeLeft = dash_time;
-			m_dashing = false;
-
-			m_airJumpEmitter->restart();
-		}
-	}
-
-	if ( state.getKeyDown (K_DASH) && !m_grounded)
-	{
-		s_sndHdl->play_buffer(s_sndDash, 1);
-		m_dashing = true;
-	}
-	if (!state.getKeyState(K_DASH) || m_dashTimeLeft <= 0)
-	{
-		if (m_dashing) s_sndHdl->stop();
-		m_dashing = false;
-	}
-
-	if (m_dashing)
-	{
-		m_vel.y = 0;
-		if (m_dashTimeLeft <= 0) m_acc += gra_acc;
-		else m_dashTimeLeft -= deltaTime;
+	if (m_failed) {
+		ensureAnim("Death");
+		s_sndHdl->stop();
+		m_vel.x = vel_run.x;
+		m_fri = math::vec2f(0,0);
+		m_acc = gra_acc;
+		m_velLim = vel_run;
 	}
 	else
 	{
-		if (state.getKeyState(K_JUMP) && m_jumpTimeLeft > 0)
-			m_vel.y = vel_jmp.y;
-		else m_jumpTimeLeft = 0;
 
-		if (m_jumpTimeLeft <= 0) m_acc += gra_acc;
-		else m_jumpTimeLeft -= deltaTime;
+		InputState state = Input::Instance().getInputState(0);
+
+		if (m_grounded) {
+			m_airJumpLeft = 1;
+			m_groundedTime += deltaTime;
+			if(ensureAnim("Run")) s_sndHdl->play_buffer(s_sndRun, 1);
+		}
+		else {
+			m_groundedTime = 0;
+			if (m_dashing)
+			{
+				ensureAnim("Dash");
+			}
+			else
+			{
+				if (m_vel.y > 0) ensureAnim("Jump");
+				else ensureAnim("Fall");
+			}
+		}
+
+		m_acc = math::vec2f(0,0);
+		m_fri = math::vec2f(0,0);
+		m_velLim = vel_run;
+		m_vel.x = vel_run.x;
+
+		if ( state.getKeyDown(K_JUMP))
+		{
+			if (m_grounded)
+			{
+				s_sndHdl->play_buffer(s_sndJump, 0);
+				m_jumpTimeLeft = jump_time;
+				m_dashTimeLeft = dash_time;
+
+			}
+			else if (m_airJumpLeft > 0)
+			{
+				s_sndHdl->play_buffer(s_sndAirJump, 0);
+				m_airJumpLeft--;
+				m_jumpTimeLeft = jump_time;
+				m_dashTimeLeft = dash_time;
+				m_dashing = false;
+
+				m_airJumpEmitter->restart();
+			}
+		}
+
+		if ( state.getKeyDown (K_DASH) && !m_grounded)
+		{
+			s_sndHdl->play_buffer(s_sndDash, 1);
+			m_dashing = true;
+		}
+		if (!state.getKeyState(K_DASH) || m_dashTimeLeft <= 0)
+		{
+			if (m_dashing) s_sndHdl->stop();
+			m_dashing = false;
+		}
+
+		if (m_dashing)
+		{
+			m_vel.y = 0;
+			if (m_dashTimeLeft <= 0) m_acc += gra_acc;
+			else m_dashTimeLeft -= deltaTime;
+		}
+		else
+		{
+			if (state.getKeyState(K_JUMP) && m_jumpTimeLeft > 0)
+				m_vel.y = vel_jmp.y;
+			else m_jumpTimeLeft = 0;
+
+			if (m_jumpTimeLeft <= 0) m_acc += gra_acc;
+			else m_jumpTimeLeft -= deltaTime;
+		}
 	}
-
 	TilemapCharacter::update(deltaTime);
 
 	if (m_almostFail)

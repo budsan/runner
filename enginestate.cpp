@@ -2,6 +2,9 @@
 
 #include <time.h>
 
+#include "keys.h"
+#include "input/input.h"
+
 #include "gameframework/graphics/graphics.h"
 #include "gameframework/graphics/screen.h"
 
@@ -12,7 +15,15 @@ void EngineState::update(float deltaTime)
 {
 	if (player.loaded())
 	{
-		if (player.failed()) reset();
+		if (player.failed())
+		{
+			const InputState &state = Input::Instance().getInputState();
+			if (state.getAnyKeyDown())
+			{
+				reset();
+			}
+		}
+
 		player.update(deltaTime);
 	}
 }

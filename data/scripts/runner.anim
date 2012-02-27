@@ -10,3 +10,5 @@ ANIM "Fall" "runner" 0
 ANIM "Dash" "runner" 0
 160 0 32 32 16 32 100
 192 0 32 32 16 32 100
+ANIM "Death" "runner" 0
+224 0 32 32 16 32 100
