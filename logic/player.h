@@ -3,7 +3,9 @@
 #include <memory>
 
 #include "audio/emyl.h"
-#include "gameframework/tools/particleemitter.h"
+#include "tools/particleemitter.h"
+#include "generic/event.h"
+
 #include "tilemapcharacter.h"
 
 class World;
@@ -19,6 +21,12 @@ public:
 	void reset();
 
 	bool failed() { return m_failed; }
+
+	Event<bool> hasFailed;
+	Event<bool> hasJumped;
+	Event<bool> hasAirJumped;
+	Event<bool> hasDashed;
+
 private:
 
 	static std::shared_ptr<SpriteAnimData> s_sprData;
@@ -35,11 +43,14 @@ private:
 	bool m_dashing;
 	bool m_almostFail;
 	bool m_failed;
+	bool m_groundedDash;
+
 	int m_airJumpLeft;
 	float m_almostFailTime;
 	float m_groundedTime;
 	float m_jumpTimeLeft;
 	float m_dashTimeLeft;
+
 	std::unique_ptr<ParticleEmitter> m_runEmitter;
 	std::unique_ptr<ParticleEmitter> m_airJumpEmitter;
 

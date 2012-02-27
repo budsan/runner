@@ -1,6 +1,7 @@
 #include "enginestate.h"
 
 #include <time.h>
+#include <sstream>
 
 #include "keys.h"
 #include "input/input.h"
@@ -8,17 +9,89 @@
 #include "gameframework/graphics/graphics.h"
 #include "gameframework/graphics/screen.h"
 
-EngineState:: EngineState() : tilemap(16, 14), backmap(16, 128), player(tilemap) {}
+EngineState:: EngineState() : tilemap(16, 14), backmap(16, 1024), player(tilemap) {}
 EngineState::~EngineState() {}
+
+void EngineState::load()
+{
+	camera.resizeScreen(400);
+	player.load();
+	backmap.setColor(rgba(0.5f));
+
+	middleText.loadFont("data/font/nibby.ttf");
+	middleText.font().setAlignment(Font::BASELINE, Font::CENTER);
+	middleText.setColor(rgba(1,1,1,1));
+	middleText.clampedPos() = math::vec2f(0.5f, 0.5f);
+
+	scoreText.loadFont("data/font/nibby.ttf");
+	scoreText.setColor(rgba(1,1,1,1));
+	scoreText.clampedPos() = math::vec2f(0.01f, 0.95f);
+
+	player.hasJumped += [&](bool foo)
+	{
+		if (this->tutorial_playing) this->tutorial_jumped = true;
+		else score += -5;
+	};
+
+	player.hasAirJumped += [&](bool foo)
+	{
+		if (this->tutorial_jumped) this->tutorial_airjumped = true;
+		else score += -10;
+	};
+
+	player.hasDashed += [&](bool foo)
+	{
+		if (this->tutorial_airjumped) this->tutorial_dashed = true;
+		else score += -15;
+	};
+
+	startTutorial();
+}
+
+void EngineState::unload()
+{
+
+}
 
 void EngineState::update(float deltaTime)
 {
+	if (tutorial_playing)
+	{
+		if (!tutorial_jumped) {
+			middleText.displayText() = "Press up for jump";
+		}
+		else if(!tutorial_airjumped) {
+			middleText.displayText() = "Press up in middle air for air jump";
+		}
+		else if(!tutorial_dashed) {
+			middleText.displayText() = "Press right in middle air for flying";
+		}
+		else if (tutorial_countdown < 3.0) {
+			middleText.displayText() = "Now you are ready!";
+			tutorial_countdown += deltaTime;
+		}
+		else {
+			reset();
+		}
+	}
+	else
+	{
+		if (!player.failed())
+		{
+			score += deltaTime * 100;
+			std::stringstream ss; ss << "Score: " << (int)score;
+			scoreText.displayText() = ss.str();
+		}
+	}
+
 	if (player.loaded())
 	{
 		if (player.failed())
 		{
+			middleText.displayText() = "Press any key to continue...";
 			const InputState &state = Input::Instance().getInputState();
-			if (state.getAnyKeyDown())
+
+			if (state.isAnyKeyDown())
 			{
 				reset();
 			}
@@ -26,19 +99,6 @@ void EngineState::update(float deltaTime)
 
 		player.update(deltaTime);
 	}
-}
-
-void EngineState::load()
-{
-	camera.resizeScreen(400);
-	player.load();
-	backmap.setColor(rgba(0.5f));
-	reset();
-}
-
-void EngineState::unload()
-{
-
 }
 
 void EngineState::draw()
@@ -74,6 +134,21 @@ void EngineState::draw()
 	tilemap.draw(frustrum);}
 
 	if (player.loaded()) player.draw();
+	if (!tutorial_playing) scoreText.draw();
+	middleText.draw();
+}
+
+void EngineState::startTutorial()
+{
+	player.reset();
+	tilemap.init(0);
+	backmap.init(time(0));
+
+	tutorial_playing = true;
+	tutorial_jumped = false;
+	tutorial_airjumped = false;
+	tutorial_dashed = false;
+	tutorial_countdown = 0;
 }
 
 void EngineState::reset()
@@ -81,5 +156,12 @@ void EngineState::reset()
 	player.reset();
 	tilemap.init(time(0));
 	backmap.init(time(0)*2);
+
+	middleText.displayText() = "";
+	score = 0;
+	tutorial_playing = false;
+	tutorial_jumped = false;
+	tutorial_airjumped = false;
+	tutorial_dashed = false;
 }
 

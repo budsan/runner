@@ -2,6 +2,7 @@
 
 #include "gameframework/gamestate.h"
 #include "gameframework/graphics/camera2d.h"
+#include "gameframework/graphics/tools/texthud.h"
 
 #include "logic/player.h"
 #include "logic/runnertilemap.h"
@@ -20,7 +21,18 @@ public:
 
 private:
 
+	void startTutorial();
 	void reset();
+
+	bool tutorial_playing;
+	bool tutorial_jumped;
+	bool tutorial_airjumped;
+	bool tutorial_dashed;
+	float tutorial_countdown;
+
+	TextHUD middleText;
+	TextHUD scoreText;
+	float score;
 
 	Camera2D camera;
 	RunnerTilemap tilemap;

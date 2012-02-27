@@ -84,7 +84,7 @@ void Player::unload()
 
 void Player::update(float deltaTime)
 {
-	static const math::vec2f gra_acc(   0 -1200);
+	static const math::vec2f gra_acc(   0,-1200);
 	static const math::vec2f vel_run( 300,  800);
 	static const math::vec2f vel_jmp(   0,  300);
 	static const float jump_time = 0.2f;
@@ -95,23 +95,26 @@ void Player::update(float deltaTime)
 	if (m_failed) {
 		ensureAnim("Death");
 		s_sndHdl->stop();
-		m_vel.x = vel_run.x;
-		m_fri = math::vec2f(0,0);
+		m_fri = math::vec2f(1000, 0);
 		m_acc = gra_acc;
 		m_velLim = vel_run;
 	}
 	else
 	{
-
-		InputState state = Input::Instance().getInputState(0);
+		const InputState &state = Input::Instance().getInputState();
 
 		if (m_grounded) {
 			m_airJumpLeft = 1;
 			m_groundedTime += deltaTime;
+			m_groundedDash = state.getKeyState(K_DASH);
+			m_dashTimeLeft = dash_time;
+
 			if(ensureAnim("Run")) s_sndHdl->play_buffer(s_sndRun, 1);
 		}
 		else {
+			m_groundedDash = false;
 			m_groundedTime = 0;
+
 			if (m_dashing)
 			{
 				ensureAnim("Dash");
@@ -136,6 +139,8 @@ void Player::update(float deltaTime)
 				m_jumpTimeLeft = jump_time;
 				m_dashTimeLeft = dash_time;
 
+				hasJumped(true);
+
 			}
 			else if (m_airJumpLeft > 0)
 			{
@@ -146,6 +151,7 @@ void Player::update(float deltaTime)
 				m_dashing = false;
 
 				m_airJumpEmitter->restart();
+				hasAirJumped(true);
 			}
 		}
 
@@ -153,6 +159,7 @@ void Player::update(float deltaTime)
 		{
 			s_sndHdl->play_buffer(s_sndDash, 1);
 			m_dashing = true;
+			hasDashed(true);
 		}
 		if (!state.getKeyState(K_DASH) || m_dashTimeLeft <= 0)
 		{
@@ -181,7 +188,11 @@ void Player::update(float deltaTime)
 	if (m_almostFail)
 	{
 		m_almostFailTime += deltaTime;
-		if (m_almostFailTime > 0.1) m_failed = true;
+		if (m_almostFailTime > 0.1)
+		{
+			hasFailed(true);
+			m_failed = true;
+		}
 	}
 
 	if (m_runEmitter == nullptr)
@@ -244,6 +255,7 @@ void Player::noUpCollision()
 
 void Player::noDownCollision()
 {
+	m_dashing = m_groundedDash;
 	m_grounded = false;
 }
 

@@ -28,6 +28,7 @@ void RunnerTilemap::setColl(int x, int y, bool col)
 bool RunnerTilemap::isColl(int x, int y)
 {
 	if ( y < 0 ) return true;
+	if (m_seed == 0) return false;
 
 	x = x < 0 ?  0 : x;
 	if (m_chunks.size() <= x) generateUntil(x);
