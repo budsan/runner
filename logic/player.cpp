@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "log.h"
+#include "graphics/graphics.h"
 #include "audio/emyl.h"
 
 #include "keys.h"
@@ -24,6 +25,7 @@ Player::Player(Tilemap &parent) : TilemapCharacter(parent), m_runEmitter(nullptr
 	m_jumpTimeLeft = 0.0f;
 	m_init = false;
 	m_dashing = false;
+	m_failed = false;
 }
 
 void Player::load()
@@ -89,13 +91,15 @@ void Player::update(float deltaTime)
 	const math::vec2f vel_run( 300,  800);
 	const math::vec2f vel_jmp(   0,  300);
 	const float jump_time = 0.2f;
-	const float dash_time = 1.0f;
+	const float dash_time = 0.5f;
 
 	if (m_grounded) {
-        m_airJumpLeft = 1;
+		m_airJumpLeft = 1;
+		m_groundedTime += deltaTime;
 		if(ensureAnim("Run")) s_sndHdl->play_buffer(s_sndRun, 1);
 	}
 	else {
+		m_groundedTime = 0;
 		if (m_dashing)
 		{
 			ensureAnim("Dash");
@@ -130,7 +134,6 @@ void Player::update(float deltaTime)
 			m_dashing = false;
 
 			m_airJumpEmitter->restart();
-			m_airJumpEmitter->setPosition(Sprite::pos());
 		}
 	}
 
@@ -163,6 +166,12 @@ void Player::update(float deltaTime)
 
 	TilemapCharacter::update(deltaTime);
 
+	if (m_almostFail)
+	{
+		m_almostFailTime += deltaTime;
+		if (m_almostFailTime > 0.1) m_failed = true;
+	}
+
 	if (m_runEmitter == nullptr)
 	{
 		if (s_runEmitter != nullptr)
@@ -173,8 +182,9 @@ void Player::update(float deltaTime)
 	}
 
 	if (m_runEmitter != nullptr) {
-		m_runEmitter->setPosition(Sprite::pos());
-		if (m_lastAnim == "Run") m_runEmitter->setParticleNumber(-1);
+		m_runEmitter->setPosition(m_pos - math::vec2f(8,0));
+		if (m_lastAnim == "Run" && m_groundedTime > 0.1f)
+			m_runEmitter->setParticleNumber(-1);
 		else m_runEmitter->setParticleNumber(0);
 
 		m_runEmitter->update(deltaTime);
@@ -196,8 +206,13 @@ void Player::preDrawing()
 void Player::postDrawing()
 {
 	TilemapCharacter::postDrawing();
+
 	if (m_runEmitter != nullptr) m_runEmitter->draw();
+
+	glPushMatrix();
+	glMultMatrixf(math::mat4f::fromTranslate(m_pos).v);
 	if (m_airJumpEmitter != nullptr) m_airJumpEmitter->draw();
+	glPopMatrix();
 }
 
 void Player::noLeftCollision()
@@ -206,7 +221,8 @@ void Player::noLeftCollision()
 }
 void Player::noRightCollision()
 {
-
+	m_almostFailTime = 0;
+	m_almostFail = false;
 }
 
 void Player::noUpCollision()
@@ -228,6 +244,7 @@ bool Player::onLeftCollision(int x, int j)
 
 bool Player::onRightCollision(int x, int j)
 {
+	m_almostFail = true;
 	m_vel.x = 0;
 	return true;
 }
@@ -250,9 +267,11 @@ bool Player::onDownCollision(int x, int j)
 void Player::reset()
 {
 	m_init = true;
-    m_pos = math::vec2f(0,0);
+	m_pos = math::vec2f(0,16);
 	m_vel = math::vec2f(0,0);
 	m_dashing = false;
+	m_groundedTime = 0;
+	m_failed = false;
 
 	if (s_sprData != nullptr) {
 		TilemapCharacter::setAnimData(s_sprData);

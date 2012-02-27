@@ -17,6 +17,8 @@ public:
 	static bool loaded();
 	static void unload();
 	void reset();
+
+	bool failed() { return m_failed; }
 private:
 
 	static std::shared_ptr<SpriteAnimData> s_sprData;
@@ -31,7 +33,11 @@ private:
 	bool m_init;
 	bool m_grounded;
 	bool m_dashing;
+	bool m_almostFail;
+	bool m_failed;
 	int m_airJumpLeft;
+	float m_almostFailTime;
+	float m_groundedTime;
 	float m_jumpTimeLeft;
 	float m_dashTimeLeft;
 	std::unique_ptr<ParticleEmitter> m_runEmitter;

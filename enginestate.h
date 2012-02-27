@@ -20,7 +20,10 @@ public:
 
 private:
 
+	void reset();
+
 	Camera2D camera;
 	RunnerTilemap tilemap;
+	RunnerTilemap backmap;
 	Player player;
 };
