@@ -1,5 +1,6 @@
 #include "runnertilemap.h"
 
+#include <list>
 #include <cstdlib>
 #include <random>
 
@@ -53,21 +54,44 @@ void RunnerTilemap::draw(const math::bbox2f &screen)
 	math::vec2i start = tilePos(screen.min);
 	math::vec2i end   = tilePos(screen.max) + math::vec2i(1,1);
 
+	std::list<math::vec2i> colls;
 	for (int j = start.y; j < end.y; ++j)
 	{
 		for (int i = start.x; i < end.x; ++i)
 		{
-			math::bbox2f quad(
-						math::vec2f(i,j)*unitsPerTile,
-						math::vec2f(i+1,j+1)*unitsPerTile);
-
-			if (isColl(i,j))
-			{
-				glColor(m_color);
-				::draw(quad);
-			}
+			if (isColl(i,j)) colls.push_back(math::vec2i(i,j));
 		}
 	}
+
+	std::vector<math::vec2f> vertcoords;
+	std::vector<unsigned int> indices;
+
+	vertcoords.reserve(colls.size()*4);
+	indices.reserve(colls.size()*6);
+
+	std::list<math::vec2i>::iterator it = colls.begin();
+	for(;it != colls.end(); it++)
+	{
+		int i = it->x, j = it->y;
+		math::bbox2f quad(
+			math::vec2f(i,j)    *unitsPerTile,
+			math::vec2f(i+1,j+1)*unitsPerTile);
+
+		::draw(quad, vertcoords, indices);
+	}
+
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_DEPTH_TEST);
+	glDepthMask(GL_FALSE);
+	glDisable(GL_BLEND);
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glColor(m_color);
+	glVertexPointer  (2, GL_FLOAT, 0, &vertcoords[0]);
+	glDrawElements(GL_TRIANGLES, colls.size()*6, GL_UNSIGNED_INT, &indices[0]);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void RunnerTilemap::generateUntil(int x)

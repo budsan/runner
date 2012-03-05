@@ -17,12 +17,12 @@ math::vec2i Tilemap::tilePos(float x, float y)
 		floor(y/unitsPerTile));
 }
 
-unsigned int Tilemap::tilePosX(float x)
+int Tilemap::tilePosX(float x)
 {
 	return floor(x/unitsPerTile);
 }
 
-unsigned int Tilemap::tilePosY(float y)
+int Tilemap::tilePosY(float y)
 {
 	return floor(y/unitsPerTile);
 }

@@ -16,8 +16,8 @@ public:
 	//what tile is in world coordinate
 	math::vec2i tilePos(math::vec2f pos); 
 	math::vec2i tilePos(float x, float y);
-	unsigned int tilePosX(float x);
-	unsigned int tilePosY(float y);
+	int tilePosX(float x);
+	int tilePosY(float y);
 
 	float Top(int y);
 	float Bottom(int y);
