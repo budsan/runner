@@ -1,24 +1,26 @@
 #include "runnertilemap.h"
 
-#include <list>
 #include <cstdlib>
-#include <random>
+#include <stdlib.h>
+#include "boost/random.hpp"
 
 #include "graphics/primitives.h"
 #include "graphics/color.h"
+
 
 #define RESTORE_TIME_DELETED_TILES 5.0f
 
 RunnerTilemap::RunnerTilemap(float unitsPerTile, int maxHeight)
 	: Tilemap(unitsPerTile), m_maxHeight(maxHeight), m_color(0)
 {
+
 }
 
 void RunnerTilemap::init(int seed)
 {
 	this->m_seed = seed;
-	m_random = std::mt19937(seed);
-	m_chunks.resize(40);
+	m_random = boost::mt19937(seed);
+    m_chunks.resize(60);
 }
 
 void RunnerTilemap::setColl(int x, int y, bool col)
@@ -28,16 +30,16 @@ void RunnerTilemap::setColl(int x, int y, bool col)
 
 bool RunnerTilemap::isColl(int x, int y)
 {
-	if ( y < 0 ) return true;
+    if ( y < 0 ) return true;
 	if (m_seed == 0) return false;
 
 	x = x < 0 ?  0 : x;
-	if (m_chunks.size() <= x) generateUntil(x);
+	if ((int)m_chunks.size() <= x) generateUntil(x);
 
 	chunk& cur = m_chunks[x];
-	if (cur.height >= y) return true;
+    if ((int)cur.height > y) return true;
 	else {
-		if (cur.ceil > 4 && (cur.ceil + cur.height) < y )
+		if ((int)cur.ceil > 4 && (int)(cur.ceil + cur.height) < y )
 			return true;
 	}
 
@@ -49,49 +51,76 @@ void RunnerTilemap::update(float deltaTime)
 
 }
 
+
+
+
 void RunnerTilemap::draw(const math::bbox2f &screen)
 {
 	math::vec2i start = tilePos(screen.min);
 	math::vec2i end   = tilePos(screen.max) + math::vec2i(1,1);
 
-	std::list<math::vec2i> colls;
-	for (int j = start.y; j < end.y; ++j)
-	{
-		for (int i = start.x; i < end.x; ++i)
-		{
-			if (isColl(i,j)) colls.push_back(math::vec2i(i,j));
-		}
-	}
-
-	std::vector<math::vec2f> vertcoords;
-	std::vector<unsigned int> indices;
-
-	vertcoords.reserve(colls.size()*4);
-	indices.reserve(colls.size()*6);
-
-	std::list<math::vec2i>::iterator it = colls.begin();
-	for(;it != colls.end(); it++)
-	{
-		int i = it->x, j = it->y;
-		math::bbox2f quad(
-			math::vec2f(i,j)    *unitsPerTile,
-			math::vec2f(i+1,j+1)*unitsPerTile);
-
-		::draw(quad, vertcoords, indices);
-	}
-
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_DEPTH_TEST);
 	glDepthMask(GL_FALSE);
 	glDisable(GL_BLEND);
 
-	glEnableClientState(GL_VERTEX_ARRAY);
+	#define VERTEX_ARRAY_SIZE 512
+	static float vertcoords[VERTEX_ARRAY_SIZE * 8];
+	static unsigned short indices[VERTEX_ARRAY_SIZE * 6];
+	unsigned short c = 0;
+
 	glColor(m_color);
-	glVertexPointer  (2, GL_FLOAT, 0, &vertcoords[0]);
-	glDrawElements(GL_TRIANGLES, colls.size()*6, GL_UNSIGNED_INT, &indices[0]);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	for (int j = start.y; j < end.y; ++j)
+	{
+		for (int i = start.x; i < end.x; ++i)
+		{
+			if (isColl(i,j))
+			{
+				math::bbox2f quad(
+					math::vec2f(i+0,j+0)*unitsPerTile,
+					math::vec2f(i+1,j+1)*unitsPerTile);
+
+				vertcoords[c*8 + 0] = quad.min.x;
+				vertcoords[c*8 + 1] = quad.min.y;
+				vertcoords[c*8 + 2] = quad.max.x;
+				vertcoords[c*8 + 3] = quad.min.y;
+				vertcoords[c*8 + 4] = quad.max.x;
+				vertcoords[c*8 + 5] = quad.max.y;
+				vertcoords[c*8 + 6] = quad.min.x;
+				vertcoords[c*8 + 7] = quad.max.y;
+
+				indices[c*6 + 0] = c*4 + 3;
+				indices[c*6 + 1] = c*4 + 0;
+				indices[c*6 + 2] = c*4 + 1;
+				indices[c*6 + 3] = c*4 + 1;
+				indices[c*6 + 4] = c*4 + 2;
+				indices[c*6 + 5] = c*4 + 3;
+
+				if (++c == VERTEX_ARRAY_SIZE)
+				{
+					glGetError();
+
+					glEnableClientState(GL_VERTEX_ARRAY);
+					glVertexPointer  (2, GL_FLOAT, 0, vertcoords);
+					glDrawElements(GL_TRIANGLES, c*6, GL_UNSIGNED_SHORT, indices);
+					glDisableClientState(GL_VERTEX_ARRAY);
+
+					GLint err = glGetError();
+					if (err != 0) std::cerr << "GL error " << err << std::endl;
+
+					c = 0;
+				}
+			}
+		}
+	}
+
+	if (c)
+	{
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer  (2, GL_FLOAT, 0, vertcoords);
+		glDrawElements(GL_TRIANGLES, c*6, GL_UNSIGNED_SHORT, indices);
+		glDisableClientState(GL_VERTEX_ARRAY);
+	}
 }
 
 void RunnerTilemap::generateUntil(int x)

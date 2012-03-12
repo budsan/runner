@@ -24,6 +24,10 @@ private:
 	void startTutorial();
 	void reset();
 
+	void playerHasJumped();
+	void playerHasAirJumped();
+	void playerHasDashed();
+
 	bool tutorial_playing;
 	bool tutorial_jumped;
 	bool tutorial_airjumped;

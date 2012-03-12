@@ -1,10 +1,11 @@
 #pragma once
 
-#include <memory>
+#include "boost/shared_ptr.hpp"
+#include "boost/bind.hpp"
+#include "boost/function.hpp"
 
 #include "audio/emyl.h"
 #include "tools/particleemitter.h"
-#include "generic/event.h"
 
 #include "tilemapcharacter.h"
 
@@ -22,17 +23,17 @@ public:
 
 	bool failed() { return m_failed; }
 
-	Event<bool> hasFailed;
-	Event<bool> hasJumped;
-	Event<bool> hasAirJumped;
-	Event<bool> hasDashed;
+	boost::function<void()> hasFailed;
+	boost::function<void()> hasJumped;
+	boost::function<void()> hasAirJumped;
+	boost::function<void()> hasDashed;
 
 private:
 
-	static std::shared_ptr<SpriteAnimData> s_sprData;
-	static std::unique_ptr<emyl::sound> s_sndHdl;
-	static std::unique_ptr<ParticleEmitter> s_runEmitter;
-	static std::unique_ptr<ParticleEmitter> s_airJumpEmitter;
+	static boost::shared_ptr<SpriteAnimData> s_sprData;
+	static boost::shared_ptr<emyl::sound> s_sndHdl;
+	static boost::shared_ptr<ParticleEmitter> s_runEmitter;
+	static boost::shared_ptr<ParticleEmitter> s_airJumpEmitter;
 	static ALuint s_sndJump;
 	static ALuint s_sndAirJump;
 	static ALuint s_sndDash;
@@ -51,8 +52,8 @@ private:
 	float m_jumpTimeLeft;
 	float m_dashTimeLeft;
 
-	std::unique_ptr<ParticleEmitter> m_runEmitter;
-	std::unique_ptr<ParticleEmitter> m_airJumpEmitter;
+	boost::shared_ptr<ParticleEmitter> m_runEmitter;
+	boost::shared_ptr<ParticleEmitter> m_airJumpEmitter;
 
 protected:
 

@@ -37,7 +37,7 @@ void Runner::configure()
 	k[0][K_DASH].setDefault(SDLK_RIGHT);
 
 	m_settings->setKeybinds(k);
-	m_settings->get("ScreenWidth" )->set(800);
+    m_settings->get("ScreenWidth" )->set(1024);
 	m_settings->get("ScreenHeight")->set(600);
 	m_settings->get("Fullscreen"  )->set(false);
 }

@@ -2,7 +2,7 @@
 #define RUNNERTILEMAP_H
 
 #include <vector>
-#include <random>
+#include "boost/random.hpp"
 
 #include "math/vec2.h"
 #include "math/bbox.h"
@@ -14,6 +14,7 @@ class RunnerTilemap : public Tilemap
 {
 public:
 	RunnerTilemap(float unitsPerTile, int maxHeight);
+	virtual ~RunnerTilemap() {}
 
     void init(int seed);
 	void update(float deltaTime);
@@ -27,7 +28,7 @@ public:
 private:
     int m_seed;
     int m_maxHeight;
-    std::mt19937 m_random;
+    boost::mt19937 m_random;
 
     struct chunk {
 	    chunk() : height(0), ceil(0) {}

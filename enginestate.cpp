@@ -3,49 +3,37 @@
 #include <time.h>
 #include <sstream>
 
+#include "boost/bind.hpp"
+
 #include "keys.h"
 #include "input/input.h"
 
-#include "gameframework/graphics/graphics.h"
-#include "gameframework/graphics/screen.h"
+#include "graphics/graphics.h"
+#include "graphics/screen.h"
 
-EngineState:: EngineState() : tilemap(16, 14), backmap(16, 1024), player(tilemap) {}
+EngineState:: EngineState() : tilemap(24, 10), backmap(16, 256), player(tilemap) {}
 EngineState::~EngineState() {}
 
 void EngineState::load()
 {
-	camera.resizeScreen(400);
+    camera.init();
 	player.load();
 	backmap.setColor(rgba(0.5f));
 
-	middleText.loadFont("data/font/nibby.ttf");
-	middleText.font().setAlignment(Font::BASELINE, Font::CENTER);
+    middleText.loadFont("data/font/nibby.ttf");
+    middleText.font()->setAlignment(Font::CENTER);
 	middleText.setColor(rgba(1,1,1,1));
 	middleText.clampedPos() = math::vec2f(0.5f, 0.5f);
 
-	scoreText.loadFont("data/font/nibby.ttf");
+    scoreText.font() =  middleText.font();
 	scoreText.setColor(rgba(1,1,1,1));
-	scoreText.clampedPos() = math::vec2f(0.01f, 0.95f);
+    scoreText.clampedPos() = math::vec2f(0.5f, 0.95f);
 
-	player.hasJumped += [&](bool foo)
-	{
-		if (this->tutorial_playing) this->tutorial_jumped = true;
-		else score += -5;
-	};
+    player.hasJumped = boost::bind(&EngineState::playerHasJumped, this);
+    player.hasAirJumped = boost::bind(&EngineState::playerHasAirJumped, this);
+    player.hasDashed = boost::bind(&EngineState::playerHasDashed, this);
 
-	player.hasAirJumped += [&](bool foo)
-	{
-		if (this->tutorial_jumped) this->tutorial_airjumped = true;
-		else score += -10;
-	};
-
-	player.hasDashed += [&](bool foo)
-	{
-		if (this->tutorial_airjumped) this->tutorial_dashed = true;
-		else score += -15;
-	};
-
-	startTutorial();
+    startTutorial();
 }
 
 void EngineState::unload()
@@ -110,31 +98,31 @@ void EngineState::draw()
 
 	//BACKTILEMAP
 	camera.setZoom(0.25f);
-	camera.setPos(math::vec2f(player.pos().x-2048, 512)/4);
+    camera.setPos(math::vec2f(player.pos().x-1024, 1024)*0.25f);
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf(camera.getProjectionMatrix().v);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(camera.getModelviewMatrix().v);
 
-	{auto frustrum = camera.getBounding();
+	{math::bbox2f frustrum = camera.getBounding();
 	backmap.draw(frustrum);}
 
 
 	//FRONT TILEMAP
 	camera.setZoom(1);
-	camera.setPos(math::vec2f(player.pos().x+64, 128));
+    camera.setPos(math::vec2f(player.pos().x+128, 128));
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf(camera.getProjectionMatrix().v);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(camera.getModelviewMatrix().v);
 
-	{auto frustrum = camera.getBounding();
+	{math::bbox2f frustrum = camera.getBounding();
 	tilemap.draw(frustrum);}
 
 	if (player.loaded()) player.draw();
-	if (!tutorial_playing) scoreText.draw();
+    if (!tutorial_playing) scoreText.draw();
 	middleText.draw();
 }
 
@@ -163,5 +151,23 @@ void EngineState::reset()
 	tutorial_jumped = false;
 	tutorial_airjumped = false;
 	tutorial_dashed = false;
+}
+
+void EngineState::playerHasJumped()
+{
+	if (this->tutorial_playing) this->tutorial_jumped = true;
+	else score += -5;
+}
+
+void EngineState::playerHasAirJumped()
+{
+	if (this->tutorial_jumped) this->tutorial_airjumped = true;
+	else score += -10;
+}
+
+void EngineState::playerHasDashed()
+{
+	if (this->tutorial_airjumped) this->tutorial_dashed = true;
+	else score += -15;
 }
 
