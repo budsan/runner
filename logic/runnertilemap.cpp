@@ -30,14 +30,14 @@ void RunnerTilemap::setColl(int x, int y, bool col)
 
 bool RunnerTilemap::isColl(int x, int y)
 {
-    if ( y < 0 ) return true;
+	if ( y < 0 ) return true;
 	if (m_seed == 0) return false;
 
 	x = x < 0 ?  0 : x;
 	if ((int)m_chunks.size() <= x) generateUntil(x);
 
 	chunk& cur = m_chunks[x];
-    if ((int)cur.height > y) return true;
+	if ((int)cur.height > y) return true;
 	else {
 		if ((int)cur.ceil > 4 && (int)(cur.ceil + cur.height) < y )
 			return true;
@@ -50,9 +50,6 @@ void RunnerTilemap::update(float deltaTime)
 {
 
 }
-
-
-
 
 void RunnerTilemap::draw(const math::bbox2f &screen)
 {

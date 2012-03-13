@@ -11,29 +11,29 @@
 #include "graphics/graphics.h"
 #include "graphics/screen.h"
 
-EngineState:: EngineState() : tilemap(24, 10), backmap(16, 256), player(tilemap) {}
+EngineState:: EngineState() : tilemap(24, 16), backmap(16, 256), player(tilemap) {}
 EngineState::~EngineState() {}
 
 void EngineState::load()
 {
-    camera.init();
+	camera.init();
 	player.load();
 	backmap.setColor(rgba(0.5f));
 
-    middleText.loadFont("data/font/nibby.ttf");
-    middleText.font()->setAlignment(Font::CENTER);
+	middleText.loadFont("data/font/nibby.ttf");
+	middleText.font()->setAlignment(Font::CENTER);
 	middleText.setColor(rgba(1,1,1,1));
 	middleText.clampedPos() = math::vec2f(0.5f, 0.5f);
 
-    scoreText.font() =  middleText.font();
+	scoreText.font() =  middleText.font();
 	scoreText.setColor(rgba(1,1,1,1));
-    scoreText.clampedPos() = math::vec2f(0.5f, 0.95f);
+	scoreText.clampedPos() = math::vec2f(0.5f, 0.95f);
 
-    player.hasJumped = boost::bind(&EngineState::playerHasJumped, this);
-    player.hasAirJumped = boost::bind(&EngineState::playerHasAirJumped, this);
-    player.hasDashed = boost::bind(&EngineState::playerHasDashed, this);
+	player.hasJumped = boost::bind(&EngineState::playerHasJumped, this);
+	player.hasAirJumped = boost::bind(&EngineState::playerHasAirJumped, this);
+	player.hasDashed = boost::bind(&EngineState::playerHasDashed, this);
 
-    startTutorial();
+	startTutorial();
 }
 
 void EngineState::unload()
@@ -98,31 +98,35 @@ void EngineState::draw()
 
 	//BACKTILEMAP
 	camera.setZoom(0.25f);
-    camera.setPos(math::vec2f(player.pos().x-1024, 1024)*0.25f);
+	camera.setPos(math::vec2f(player.pos().x-1024, 1024)*0.25f);
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf(camera.getProjectionMatrix().v);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(camera.getModelviewMatrix().v);
 
-	{math::bbox2f frustrum = camera.getBounding();
-	backmap.draw(frustrum);}
+	{
+		math::bbox2f frustrum = camera.getBounding();
+		backmap.draw(frustrum);
+	}
 
 
 	//FRONT TILEMAP
 	camera.setZoom(1);
-    camera.setPos(math::vec2f(player.pos().x+128, 128));
+	camera.setPos(math::vec2f(player.pos().x+224, 224));
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf(camera.getProjectionMatrix().v);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(camera.getModelviewMatrix().v);
 
-	{math::bbox2f frustrum = camera.getBounding();
-	tilemap.draw(frustrum);}
+	{
+		math::bbox2f frustrum = camera.getBounding();
+		tilemap.draw(frustrum);
+	}
 
 	if (player.loaded()) player.draw();
-    if (!tutorial_playing) scoreText.draw();
+	if (!tutorial_playing) scoreText.draw();
 	middleText.draw();
 }
 
