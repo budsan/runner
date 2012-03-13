@@ -37,8 +37,8 @@ private:
 	    chunk(const chunk& c)
 		    : height(c.height), ceil(c.ceil) {}
 
-	    unsigned int height;
-	    unsigned short ceil;
+	    int height;
+	    short ceil;
     };
 
     std::vector<chunk> m_chunks;
