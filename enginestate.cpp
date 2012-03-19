@@ -146,8 +146,8 @@ void EngineState::startTutorial()
 void EngineState::reset()
 {
 	player.reset();
-	tilemap.init(time(0));
-	backmap.init(time(0)*2);
+	tilemap.init((int) time(0));
+	backmap.init((int) time(0) * 2);
 
 	middleText.displayText() = "";
 	score = 0;

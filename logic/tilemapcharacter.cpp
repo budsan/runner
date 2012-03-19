@@ -181,10 +181,10 @@ bool TilemapCharacter::ensureAnim(std::string name)
 
 		Sprite::drawParams params;
 		getParamsToDraw(params);
-		siz.x = params.w;
-		siz.y = params.h;
-		cen.x = params.cx;
-		cen.y = params.cy;
+		siz.x = (float) params.w;
+		siz.y = (float) params.h;
+		cen.x = (float) params.cx;
+		cen.y = (float) params.cy;
 		return true;
 	}
 

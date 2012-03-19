@@ -20,7 +20,7 @@ void RunnerTilemap::init(int seed)
 {
 	this->m_seed = seed;
 	m_random = boost::mt19937(seed);
-    m_chunks.resize(60);
+	m_chunks.resize(60);
 }
 
 void RunnerTilemap::setColl(int x, int y, bool col)
@@ -74,8 +74,8 @@ void RunnerTilemap::draw(const math::bbox2f &screen)
 			if (isColl(i,j))
 			{
 				math::bbox2f quad(
-					math::vec2f(i+0,j+0)*unitsPerTile,
-					math::vec2f(i+1,j+1)*unitsPerTile);
+					math::vec2f((float) i+0,(float) j+0)*m_unitsPerTile,
+					math::vec2f((float) i+1,(float) j+1)*m_unitsPerTile);
 
 				vertcoords[c*8 + 0] = quad.min.x;
 				vertcoords[c*8 + 1] = quad.min.y;
@@ -86,12 +86,12 @@ void RunnerTilemap::draw(const math::bbox2f &screen)
 				vertcoords[c*8 + 6] = quad.min.x;
 				vertcoords[c*8 + 7] = quad.max.y;
 
-				indices[c*6 + 0] = c*4 + 3;
-				indices[c*6 + 1] = c*4 + 0;
-				indices[c*6 + 2] = c*4 + 1;
-				indices[c*6 + 3] = c*4 + 1;
-				indices[c*6 + 4] = c*4 + 2;
-				indices[c*6 + 5] = c*4 + 3;
+				indices[c*6 + 0] = (unsigned short) (c*4 + 3);
+				indices[c*6 + 1] = (unsigned short) (c*4 + 0);
+				indices[c*6 + 2] = (unsigned short) (c*4 + 1);
+				indices[c*6 + 3] = (unsigned short) (c*4 + 1);
+				indices[c*6 + 4] = (unsigned short) (c*4 + 2);
+				indices[c*6 + 5] = (unsigned short) (c*4 + 3);
 
 				if (++c == VERTEX_ARRAY_SIZE)
 				{
@@ -131,15 +131,15 @@ void RunnerTilemap::generateUntil(int x)
 
 		while (curr.height == last.height)
 		{
-			short slope = (2 + m_random()%4) * (m_random()&1 ? 1 : -1);
+			short slope = (2 + m_random() % 4) * (m_random() & 1 ? 1 : -1);
 			if (ceiled || slope < 0)
 			{
 				curr.ceil = 0;
-				if (ceiled) slope = -1 * (short)abs(slope);
+				if (ceiled) slope = -1 * abs(slope);
 			}
 			else
 			{
-				if (m_random()%4 == 0) curr.ceil = 4 + m_random()%4;
+				if (m_random() % 4 == 0) curr.ceil = 4 + m_random() % 4;
 				else curr.ceil = 0;
 			}
 
@@ -156,7 +156,7 @@ void RunnerTilemap::generateUntil(int x)
 			}
 		}
 
-		int wide  =  4 + m_random()%4;
+		int wide  =  4 + (short) m_random()%4;
 		while(wide--)
 		{
 			m_chunks.push_back(curr);

@@ -27,5 +27,5 @@ public:
 	float Right(int x);
 
 protected:
-	float unitsPerTile;
+	float m_unitsPerTile;
 };

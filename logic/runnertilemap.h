@@ -13,7 +13,7 @@
 class RunnerTilemap : public Tilemap
 {
 public:
-	RunnerTilemap(float unitsPerTile, int maxHeight);
+	RunnerTilemap(float m_unitsPerTile, int maxHeight);
 	virtual ~RunnerTilemap() {}
 
     void init(int seed);
@@ -32,8 +32,8 @@ private:
 
     struct chunk {
 	    chunk() : height(0), ceil(0) {}
-	    chunk(unsigned int height, unsigned short ceil)
-		    : height(height), ceil(ceil) {}
+	    chunk(unsigned int _height, unsigned short _ceil)
+		    : height(_height), ceil(_ceil) {}
 	    chunk(const chunk& c)
 		    : height(c.height), ceil(c.ceil) {}
 
