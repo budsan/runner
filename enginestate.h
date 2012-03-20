@@ -42,4 +42,6 @@ private:
 	RunnerTilemap tilemap;
 	RunnerTilemap backmap;
 	Player player;
+
+	emyl::stream music;
 };

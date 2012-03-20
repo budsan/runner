@@ -156,7 +156,7 @@ void RunnerTilemap::generateUntil(int x)
 			}
 		}
 
-		int wide  =  4 + (short) m_random()%4;
+		int wide  =  4 + m_random()%4;
 		while(wide--)
 		{
 			m_chunks.push_back(curr);

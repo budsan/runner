@@ -4,6 +4,8 @@ QT -= core gui
 
 INCLUDEPATH += gameframework/
 
+DEFINES += _DEBUG
+
 TARGET = runner
 
 SOURCES += \

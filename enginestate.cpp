@@ -8,6 +8,8 @@
 #include "keys.h"
 #include "input/input.h"
 
+#include "audio/emyl.h"
+
 #include "graphics/graphics.h"
 #include "graphics/screen.h"
 
@@ -32,6 +34,11 @@ void EngineState::load()
 	player.hasJumped = boost::bind(&EngineState::playerHasJumped, this);
 	player.hasAirJumped = boost::bind(&EngineState::playerHasAirJumped, this);
 	player.hasDashed = boost::bind(&EngineState::playerHasDashed, this);
+
+	music.load("data/sound/A_Airbrushed.ogg");
+	music.set_source();
+	music.set_volume(0.5f);
+	music.play();
 
 	startTutorial();
 }
