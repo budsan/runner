@@ -13,7 +13,7 @@
 #include "graphics/graphics.h"
 #include "graphics/screen.h"
 
-EngineState:: EngineState() : tilemap(24, 16), backmap(16, 256), player(tilemap) {}
+EngineState:: EngineState() : tilemap(24, 16, true), backmap(16, 256, false), player(tilemap) {}
 EngineState::~EngineState() {}
 
 void EngineState::load()
@@ -37,7 +37,7 @@ void EngineState::load()
 
 	music.load("data/sound/A_Airbrushed.ogg");
 	music.set_source();
-	//music.set_volume(0.75f);
+	music.set_loop(true);
 	music.play();
 
 	linear.setTime(0.25f);
@@ -155,7 +155,7 @@ void EngineState::draw()
 
 	//BACKTILEMAP
 	camera.setZoom(0.25f);
-	camera.setPos(math::vec2f(player.pos().x-1024, 1024)*0.25f);
+	camera.setPos(math::vec2f(player.pos().x+16384, 2048)*0.25f);
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf(camera.getProjectionMatrix().v);
 

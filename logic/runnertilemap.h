@@ -13,7 +13,7 @@
 class RunnerTilemap : public Tilemap
 {
 public:
-	RunnerTilemap(float m_unitsPerTile, int maxHeight);
+	RunnerTilemap(float m_unitsPerTile, int maxHeight, bool ceils);
 	virtual ~RunnerTilemap() {}
 
     void init(int seed);
@@ -28,6 +28,7 @@ public:
 private:
     int m_seed;
     int m_maxHeight;
+    bool m_ceils;
     boost::mt19937 m_random;
 
     struct chunk {

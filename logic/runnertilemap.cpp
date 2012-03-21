@@ -10,8 +10,8 @@
 
 #define RESTORE_TIME_DELETED_TILES 5.0f
 
-RunnerTilemap::RunnerTilemap(float unitsPerTile, int maxHeight)
-	: Tilemap(unitsPerTile), m_maxHeight(maxHeight), m_color(0)
+RunnerTilemap::RunnerTilemap(float unitsPerTile, int maxHeight, bool ceils)
+	: Tilemap(unitsPerTile), m_maxHeight(maxHeight), m_color(0), m_ceils(ceils)
 {
 
 }
@@ -132,15 +132,22 @@ void RunnerTilemap::generateUntil(int x)
 		while (curr.height == last.height)
 		{
 			short slope = (2 + m_random() % 4) * (m_random() & 1 ? 1 : -1);
-			if (ceiled || slope < 0)
+			if (m_ceils)
 			{
-				curr.ceil = 0;
-				if (ceiled) slope = -1 * abs(slope);
+				if (ceiled || slope < 0)
+				{
+					curr.ceil = 0;
+					if (ceiled) slope = -1 * abs(slope);
+				}
+				else
+				{
+					if (m_random() % 4 == 0) curr.ceil = 4 + m_random() % 4;
+					else curr.ceil = 0;
+				}
 			}
 			else
 			{
-				if (m_random() % 4 == 0) curr.ceil = 4 + m_random() % 4;
-				else curr.ceil = 0;
+				curr.ceil = 0;
 			}
 
 			curr.height = last.height + slope;
