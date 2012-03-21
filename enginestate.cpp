@@ -22,14 +22,14 @@ void EngineState::load()
 	player.load();
 	backmap.setColor(rgba(0.5f));
 
-	middleText.loadFont("data/font/nibby.ttf");
+	middleText.loadFont("data/font/nibby.ttf", 32);
 	middleText.font()->setAlignment(Font::CENTER);
 	middleText.setColor(rgba(1,1,1,1));
 	middleText.clampedPos() = math::vec2f(0.5f, 0.5f);
 
 	scoreText.font() =  middleText.font();
 	scoreText.setColor(rgba(1,1,1,1));
-	scoreText.clampedPos() = math::vec2f(0.5f, 0.95f);
+	scoreText.clampedPos() = math::vec2f(0.5f, 0.925f);
 
 	player.hasJumped = boost::bind(&EngineState::playerHasJumped, this);
 	player.hasAirJumped = boost::bind(&EngineState::playerHasAirJumped, this);
@@ -37,9 +37,10 @@ void EngineState::load()
 
 	music.load("data/sound/A_Airbrushed.ogg");
 	music.set_source();
-	music.set_volume(0.5f);
+	//music.set_volume(0.75f);
 	music.play();
 
+	linear.setTime(0.25f);
 	startTutorial();
 }
 
@@ -61,21 +62,56 @@ void EngineState::update(float deltaTime)
 		else if(!tutorial_dashed) {
 			middleText.displayText() = "Press right in middle air for flying";
 		}
-		else if (tutorial_countdown < 3.0) {
+		else if (countdown < 3.0) {
 			middleText.displayText() = "Now you are ready!";
-			tutorial_countdown += deltaTime;
+			countdown += deltaTime;
 		}
 		else {
-			reset();
+
+			if(resetTransition)
+			{
+				if (linear.reached())
+				{
+					reset();
+				}
+			}
+			else
+			{
+				resetTransition = true;
+				linear.setPos(0);
+				linear.goPos(1);
+			}
 		}
 	}
 	else
 	{
-		if (!player.failed())
+		if (countdown >= -1)
 		{
-			score += deltaTime * 100;
-			std::stringstream ss; ss << "Score: " << (int)score;
+			static char * readyStrings[] = { "GO FOR IT!!! :D", "One!!!", "Two!!", "Three!" };
+			int select = (int) floor(countdown);
+			countdown -= deltaTime * 2;
+
+			select = select >= 0 ? select : 0;
+			middleText.displayText() = readyStrings[select];
+			scoreText.displayText() = "";
+		}
+		else
+		{
+			int currShowScore = 0;
+			if (!player.failed())
+			{
+				score += deltaTime * 100;
+				currShowScore = ((int)floor(score/25))*25;
+			}
+			else
+			{
+				currShowScore = (int)score;
+			}
+
+			if (currShowScore > showScore) showScore = currShowScore;
+			std::stringstream ss; ss << "Score: " << showScore;
 			scoreText.displayText() = ss.str();
+			middleText.displayText() = "";
 		}
 	}
 
@@ -86,14 +122,28 @@ void EngineState::update(float deltaTime)
 			middleText.displayText() = "Press any key to continue...";
 			const InputState &state = Input::Instance().getInputState();
 
-			if (state.isAnyKeyDown())
+			if(resetTransition)
 			{
-				reset();
+				if (linear.reached())
+				{
+					reset();
+				}
+			}
+			else
+			{
+				if (state.isAnyKeyDown())
+				{
+					resetTransition = true;
+					linear.setPos(0);
+					linear.goPos(1);
+				}
 			}
 		}
 
 		player.update(deltaTime);
 	}
+
+	linear.update(deltaTime);
 }
 
 void EngineState::draw()
@@ -135,6 +185,8 @@ void EngineState::draw()
 	if (player.loaded()) player.draw();
 	if (!tutorial_playing) scoreText.draw();
 	middleText.draw();
+
+	if (linear.getPos() > 0) screen.fillWithColor(rgba(0, 0, 0, linear.getPos()));
 }
 
 void EngineState::startTutorial()
@@ -147,7 +199,11 @@ void EngineState::startTutorial()
 	tutorial_jumped = false;
 	tutorial_airjumped = false;
 	tutorial_dashed = false;
-	tutorial_countdown = 0;
+	countdown = 0;
+
+	resetTransition = false;
+	linear.setPos(1);
+	linear.goPos(0);
 }
 
 void EngineState::reset()
@@ -156,12 +212,17 @@ void EngineState::reset()
 	tilemap.init((int) time(0));
 	backmap.init((int) time(0) * 2);
 
-	middleText.displayText() = "";
+	showScore = 0;
 	score = 0;
 	tutorial_playing = false;
 	tutorial_jumped = false;
 	tutorial_airjumped = false;
 	tutorial_dashed = false;
+	countdown = 3.999;
+
+	resetTransition = false;
+	linear.setPos(1);
+	linear.goPos(0);
 }
 
 void EngineState::playerHasJumped()

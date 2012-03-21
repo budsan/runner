@@ -4,6 +4,8 @@
 #include "gameframework/graphics/camera2d.h"
 #include "gameframework/graphics/tools/texthud.h"
 
+#include "tools/transition.h"
+
 #include "logic/player.h"
 #include "logic/runnertilemap.h"
 
@@ -32,11 +34,11 @@ private:
 	bool tutorial_jumped;
 	bool tutorial_airjumped;
 	bool tutorial_dashed;
-	float tutorial_countdown;
 
 	TextHUD middleText;
 	TextHUD scoreText;
 	float score;
+	int showScore;
 
 	Camera2D camera;
 	RunnerTilemap tilemap;
@@ -44,4 +46,8 @@ private:
 	Player player;
 
 	emyl::stream music;
+
+	float countdown;
+	bool resetTransition;
+	TransitionLinear linear;
 };

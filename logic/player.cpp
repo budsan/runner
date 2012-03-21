@@ -67,7 +67,7 @@ void Player::load() {
 	if (s_sndRun == 0)
 	s_sndRun = audiomng->get_buffer("data/sound/running.ogg");
 	if (s_sndDash == 0)
-	s_sndDash = audiomng->get_buffer("data/sound/running.ogg");
+	s_sndDash = audiomng->get_buffer("data/sound/flying.ogg");
 }
 
 bool Player::loaded() {
@@ -275,7 +275,7 @@ bool Player::onDownCollision(int x, int j) {
 
 void Player::reset() {
 	m_init = true;
-	m_pos = math::vec2f(0, 16);
+	m_pos = math::vec2f(0, 0);
 	m_vel = math::vec2f(0, 0);
 	m_dashing = false;
 	m_groundedTime = 0;
