@@ -30,19 +30,9 @@ void RunnerTilemap::setColl(int x, int y, bool col)
 
 bool RunnerTilemap::isColl(int x, int y)
 {
-	if ( y < 0 ) return true;
-	if (m_seed == 0) return false;
-
-	x = x < 0 ?  0 : x;
-	if ((int)m_chunks.size() <= x) generateUntil(x);
-
+	x = ((x >= 0) * -1) & x;
 	chunk& cur = m_chunks[x];
-	if ((int)cur.height > y) return true;
-	else {
-		if ((int)cur.ceil > 4 && (int)(cur.ceil + cur.height) < y )
-			return true;
-	}
-
+	return (y < 0) || (cur.height > y) || ((int)cur.ceil > 4 && (int)(cur.ceil + cur.height) < y );
 	return false;
 }
 
@@ -55,6 +45,8 @@ void RunnerTilemap::draw(const math::bbox2f &screen)
 {
 	math::vec2i start = tilePos(screen.min);
 	math::vec2i end   = tilePos(screen.max) + math::vec2i(1,1);
+
+	if ((int)m_chunks.size() <= end.x) generateUntil(end.x);
 
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_DEPTH_TEST);
@@ -128,6 +120,13 @@ void RunnerTilemap::generateUntil(int x)
 		chunk& last = m_chunks.back();
 		bool ceiled = last.ceil >= 4;
 		chunk  curr(last);
+
+		if (m_seed == 0)
+		{
+			m_chunks.push_back(curr);
+			i++;
+			continue;
+		}
 
 		while (curr.height == last.height)
 		{
