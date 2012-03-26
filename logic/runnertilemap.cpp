@@ -7,6 +7,38 @@
 #include "graphics/primitives.h"
 #include "graphics/color.h"
 
+#define VERTEX_ARRAY_SIZE 512
+static float vertcoords[VERTEX_ARRAY_SIZE * 8];
+static unsigned short indices[VERTEX_ARRAY_SIZE * 6];
+
+inline void fillVertexArray(unsigned short offset, const math::bbox2f &quad)
+{
+	vertcoords[offset*8 + 0] = quad.min.x;
+	vertcoords[offset*8 + 1] = quad.min.y;
+	vertcoords[offset*8 + 2] = quad.max.x;
+	vertcoords[offset*8 + 3] = quad.min.y;
+	vertcoords[offset*8 + 4] = quad.max.x;
+	vertcoords[offset*8 + 5] = quad.max.y;
+	vertcoords[offset*8 + 6] = quad.min.x;
+	vertcoords[offset*8 + 7] = quad.max.y;
+
+	indices[offset*6 + 0] = (unsigned short) (offset*4 + 3);
+	indices[offset*6 + 1] = (unsigned short) (offset*4 + 0);
+	indices[offset*6 + 2] = (unsigned short) (offset*4 + 1);
+	indices[offset*6 + 3] = (unsigned short) (offset*4 + 1);
+	indices[offset*6 + 4] = (unsigned short) (offset*4 + 2);
+	indices[offset*6 + 5] = (unsigned short) (offset*4 + 3);
+}
+
+inline void drawVertexArray(unsigned short count)
+{
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer  (2, GL_FLOAT, 0, vertcoords);
+	glDrawElements(GL_TRIANGLES, count*6, GL_UNSIGNED_SHORT, indices);
+	glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+
 
 #define RESTORE_TIME_DELETED_TILES 5.0f
 
@@ -33,7 +65,6 @@ bool RunnerTilemap::isColl(int x, int y)
 	x = ((x >= 0) * -1) & x;
 	chunk& cur = m_chunks[x];
 	return (y < 0) || (cur.height > y) || ((int)cur.ceil > 4 && (int)(cur.ceil + cur.height) < y );
-	return false;
 }
 
 void RunnerTilemap::update(float deltaTime)
@@ -53,63 +84,62 @@ void RunnerTilemap::draw(const math::bbox2f &screen)
 	glDepthMask(GL_FALSE);
 	glDisable(GL_BLEND);
 
-	#define VERTEX_ARRAY_SIZE 512
-	static float vertcoords[VERTEX_ARRAY_SIZE * 8];
-	static unsigned short indices[VERTEX_ARRAY_SIZE * 6];
 	unsigned short c = 0;
-
 	glColor(m_color);
-	for (int j = start.y; j < end.y; ++j)
+	if (start.y < 0)
 	{
-		for (int i = start.x; i < end.x; ++i)
+		math::bbox2f quad(
+			math::vec2f((float)start.x,(float) start.y)*m_unitsPerTile,
+			math::vec2f((float)1+end.x,(float)       0)*m_unitsPerTile);
+
+		fillVertexArray(0, quad);
+		drawVertexArray(1);
+		start.y = 0;
+	}
+	if (start.x < 0) start.x = 0;
+
+	for (int i = start.x; i < end.x; ++i)
+	{
+		chunk& cur = m_chunks[i];
+		bool lastColl = false;
+		int  lastColly = start.y;
+
+		for (int j = start.y; j < end.y; ++j)
 		{
-			if (isColl(i,j))
+			bool currColl = (j < 0) || (cur.height > j) || ((int)cur.ceil > 4 && (int)(cur.ceil + cur.height) < j);
+
+			if (!lastColl && currColl) lastColly = j;
+			else if (lastColl && !currColl)
 			{
 				math::bbox2f quad(
-					math::vec2f((float) i+0,(float) j+0)*m_unitsPerTile,
-					math::vec2f((float) i+1,(float) j+1)*m_unitsPerTile);
+					math::vec2f((float) i+0,(float) lastColly)*m_unitsPerTile,
+					math::vec2f((float) i+1,(float)         j)*m_unitsPerTile);
 
-				vertcoords[c*8 + 0] = quad.min.x;
-				vertcoords[c*8 + 1] = quad.min.y;
-				vertcoords[c*8 + 2] = quad.max.x;
-				vertcoords[c*8 + 3] = quad.min.y;
-				vertcoords[c*8 + 4] = quad.max.x;
-				vertcoords[c*8 + 5] = quad.max.y;
-				vertcoords[c*8 + 6] = quad.min.x;
-				vertcoords[c*8 + 7] = quad.max.y;
-
-				indices[c*6 + 0] = (unsigned short) (c*4 + 3);
-				indices[c*6 + 1] = (unsigned short) (c*4 + 0);
-				indices[c*6 + 2] = (unsigned short) (c*4 + 1);
-				indices[c*6 + 3] = (unsigned short) (c*4 + 1);
-				indices[c*6 + 4] = (unsigned short) (c*4 + 2);
-				indices[c*6 + 5] = (unsigned short) (c*4 + 3);
-
-				if (++c == VERTEX_ARRAY_SIZE)
-				{
-					glGetError();
-
-					glEnableClientState(GL_VERTEX_ARRAY);
-					glVertexPointer  (2, GL_FLOAT, 0, vertcoords);
-					glDrawElements(GL_TRIANGLES, c*6, GL_UNSIGNED_SHORT, indices);
-					glDisableClientState(GL_VERTEX_ARRAY);
-
-					GLint err = glGetError();
-					if (err != 0) std::cerr << "GL error " << err << std::endl;
-
+				fillVertexArray(c, quad);
+				if (++c == VERTEX_ARRAY_SIZE) {
+					drawVertexArray(c);
 					c = 0;
 				}
+			}
+
+			lastColl = currColl;
+		}
+
+		if (lastColl)
+		{
+			math::bbox2f quad(
+				math::vec2f((float) i+0,(float) lastColly)*m_unitsPerTile,
+				math::vec2f((float) i+1,(float)     end.y)*m_unitsPerTile);
+
+			fillVertexArray(c, quad);
+			if (++c == VERTEX_ARRAY_SIZE) {
+				drawVertexArray(c);
+				c = 0;
 			}
 		}
 	}
 
-	if (c)
-	{
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glVertexPointer  (2, GL_FLOAT, 0, vertcoords);
-		glDrawElements(GL_TRIANGLES, c*6, GL_UNSIGNED_SHORT, indices);
-		glDisableClientState(GL_VERTEX_ARRAY);
-	}
+	if (c) drawVertexArray(c);
 }
 
 void RunnerTilemap::generateUntil(int x)
