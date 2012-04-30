@@ -19,6 +19,9 @@ protected:
     const char *getName();
     const char *getVersion();
 
+    void onGainInputFocus();
+    void onLoseInputFocus();
+
     FramesHUD frames;
 };
 

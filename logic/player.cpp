@@ -19,18 +19,20 @@ ALuint Player::s_sndDash = 0;
 ALuint Player::s_sndRun = 0;
 
 Player::Player(Tilemap &parent)
-		: TilemapCharacter(parent), hasFailed(NULL), hasJumped(NULL),
-		  hasAirJumped(NULL), hasDashed(NULL), m_runEmitter() {
+	: TilemapCharacter(parent), hasFailed(NULL), hasJumped(NULL),
+	  hasAirJumped(NULL), hasDashed(NULL), m_runEmitter()
+{
 	m_jumpTimeLeft = 0.0f;
 	m_init = false;
 	m_dashing = false;
 	m_failed = false;
+	m_grounded = false;
 }
 
 void Player::load() {
 	if (s_sprData == NULL) {
 		s_sprData = boost::shared_ptr < SpriteAnimData > (new SpriteAnimData());
-	if (!s_sprData->load("data/scripts/runner.anim")) {
+		if (!s_sprData->load("data/scripts/runner.anim")) {
 			s_sprData.reset();
 			//std::cout << "CRITICAL: data/scripts/mario01.anim doesn't exist." << std::endl;
 		}
@@ -38,8 +40,8 @@ void Player::load() {
 
 	if (s_runEmitter == NULL) {
 		s_runEmitter = boost::shared_ptr < ParticleEmitter
-				> (new ParticleEmitter());
-	if (!s_runEmitter->load("data/scripts/runner_dust.emp")) {
+			       > (new ParticleEmitter());
+		if (!s_runEmitter->load("data/scripts/runner_dust.emp")) {
 			s_runEmitter.reset();
 			//std::cout  << "CRITICAL: data/scripts/runner_dust.emp doesn't exist." << std::endl;
 		}
@@ -47,8 +49,8 @@ void Player::load() {
 
 	if (s_airJumpEmitter == NULL) {
 		s_airJumpEmitter = boost::shared_ptr < ParticleEmitter
-				> (new ParticleEmitter());
-	if (!s_airJumpEmitter->load("data/scripts/runner_airjump.emp")) {
+				   > (new ParticleEmitter());
+		if (!s_airJumpEmitter->load("data/scripts/runner_airjump.emp")) {
 			s_airJumpEmitter.reset();
 			//std::cout  << "CRITICAL: data/scripts/runner_airjump.emp doesn't exist." << std::endl;
 		}
@@ -61,13 +63,13 @@ void Player::load() {
 
 	emyl::manager* audiomng = emyl::manager::get_instance();
 	if (s_sndJump == 0)
-	s_sndJump = audiomng->get_buffer("data/sound/jump.ogg");
+		s_sndJump = audiomng->get_buffer("data/sound/jump.ogg");
 	if (s_sndAirJump == 0)
-	s_sndAirJump = audiomng->get_buffer("data/sound/airjump.ogg");
+		s_sndAirJump = audiomng->get_buffer("data/sound/airjump.ogg");
 	if (s_sndRun == 0)
-	s_sndRun = audiomng->get_buffer("data/sound/running.ogg");
+		s_sndRun = audiomng->get_buffer("data/sound/running.ogg");
 	if (s_sndDash == 0)
-	s_sndDash = audiomng->get_buffer("data/sound/flying.ogg");
+		s_sndDash = audiomng->get_buffer("data/sound/flying.ogg");
 }
 
 bool Player::loaded() {
@@ -84,9 +86,9 @@ void Player::unload() {
 }
 
 void Player::update(float deltaTime) {
-    static const math::vec2f gra_acc(0, -1800);
-    static const math::vec2f vel_run(450, 1200);
-    static const math::vec2f vel_jmp(0, 450);
+	static const math::vec2f gra_acc(0, -1800);
+	static const math::vec2f vel_run(450, 1200);
+	static const math::vec2f vel_jmp(0, 450);
 	static const float jump_time = 0.2f;
 	static const float dash_time = 0.5f;
 
@@ -99,7 +101,7 @@ void Player::update(float deltaTime) {
 		m_fri = math::vec2f(1000, 0);
 		m_acc = gra_acc;
 		m_velLim = vel_run;
-	if(m_vel.y > 0) m_vel.y = 0;
+		if(m_vel.y > 0) m_vel.y = 0;
 	} else {
 		const InputState &state = Input::Instance().getInputState();
 
@@ -109,7 +111,7 @@ void Player::update(float deltaTime) {
 			m_groundedDash = state.getKeyState(K_DASH);
 			m_dashTimeLeft = dash_time;
 
-	    if (ensureAnim("Run") || !s_sndHdl->playing())
+			if (ensureAnim("Run") || !s_sndHdl->playing())
 				s_sndHdl->play_buffer(s_sndRun, 1);
 		} else {
 			m_groundedDash = false;
@@ -192,7 +194,7 @@ void Player::update(float deltaTime) {
 	if (m_runEmitter == NULL) {
 		if (s_runEmitter != NULL)
 			m_runEmitter = boost::shared_ptr < ParticleEmitter
-					> (new ParticleEmitter(*s_runEmitter));
+				       > (new ParticleEmitter(*s_runEmitter));
 	} else {
 		m_runEmitter->update(deltaTime);
 	}
@@ -289,12 +291,12 @@ void Player::reset() {
 	if (m_runEmitter == NULL) {
 		if (s_runEmitter != NULL)
 			m_runEmitter = boost::shared_ptr < ParticleEmitter
-					> (new ParticleEmitter(*s_runEmitter));
+				       > (new ParticleEmitter(*s_runEmitter));
 	}
 
 	if (m_airJumpEmitter == NULL) {
 		if (s_airJumpEmitter != NULL)
 			m_airJumpEmitter = boost::shared_ptr < ParticleEmitter
-					> (new ParticleEmitter(*s_airJumpEmitter));
+					   > (new ParticleEmitter(*s_airJumpEmitter));
 	}
 }
