@@ -13,8 +13,8 @@ protected:
     void   load();
     void unload();
 
-    void update(float deltaTime);
-    void draw();
+    void preUpdate(float deltaTime);
+    void postDraw();
 
     const char *getName();
     const char *getVersion();

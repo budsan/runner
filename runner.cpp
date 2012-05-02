@@ -57,12 +57,12 @@ void Runner::unload()
 
 }
 
-void Runner::update(float deltaTime)
+void Runner::preUpdate(float deltaTime)
 {
 	frames.update(deltaTime);
 }
 
-void Runner::draw()
+void Runner::postDraw()
 {
 	frames.draw();
 }
