@@ -27,15 +27,17 @@ Player::Player(Tilemap &parent)
 	m_dashing = false;
 	m_failed = false;
 	m_grounded = false;
+	this->setScale(0.375f/1.0f);
 }
 
 void Player::load() {
 	if (s_sprData == NULL) {
 		s_sprData = boost::shared_ptr < SpriteAnimData > (new SpriteAnimData());
-		if (!s_sprData->load("data/scripts/runner.anim")) {
+		if (!s_sprData->load("data/scripts/runner128.anim")) {
 			s_sprData.reset();
 			//std::cout << "CRITICAL: data/scripts/mario01.anim doesn't exist." << std::endl;
 		}
+
 	}
 
 	if (s_runEmitter == NULL) {
@@ -110,6 +112,7 @@ void Player::update(float deltaTime) {
 			m_groundedTime += deltaTime;
 			m_groundedDash = state.getKeyState(K_DASH);
 			m_dashTimeLeft = dash_time;
+			m_dashing = false;
 
 			if (ensureAnim("Run") || !s_sndHdl->playing())
 				s_sndHdl->play_buffer(s_sndRun, 1);

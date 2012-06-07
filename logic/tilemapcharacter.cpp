@@ -70,14 +70,18 @@ void TilemapCharacter::update(float deltaTime)
 	// e Y_destino, y para cada x entre X_izquierda y X_derecha miramos si en
 	// la posicion x,y del tilemap hay un tile colisionable. Si lo hay es que
 	// nuestro personaje se va a chochar.
-	vec2f scen = siz-cen;
+
+	vec2f sizs = vec2f(siz.x * getScaleWidth(), siz.y * getScaleHeight());
+	vec2f cens = vec2f(cen.x * getScaleWidth(), cen.y * getScaleHeight());
+
+	vec2f scen = sizs-cens;
 	vec2f direction = posf - pos0;
 	if (direction.y < 0) //Vamos hacia abajo
 	{
 		//le restamos a la Y la mitad de su tamaño para obtener la Y inferior del sprite
 		int yo = m_parent.tilePosY(pos0.y - scen.y),
 		    yn = m_parent.tilePosY(posf.y - scen.y),
-		    xl = m_parent.tilePosX(pos0.x -  cen.x + 2),
+		    xl = m_parent.tilePosX(pos0.x - cens.x + 2),
 		    xr = m_parent.tilePosX(pos0.x + scen.x - 2);
 		for (int y = yo; y >= yn; y--)
 		{
@@ -96,9 +100,9 @@ void TilemapCharacter::update(float deltaTime)
 	else if (direction.y > 0) //Vamos hacia arriba
 	{
 		//le sumamos a la Y la mitad de su tamaño para obtener la Y superior del sprite
-		int yo = m_parent.tilePosY(pos0.y +  cen.y),
-		    yn = m_parent.tilePosY(posf.y +  cen.y),
-		    xl = m_parent.tilePosX(pos0.x -  cen.x + 2),
+		int yo = m_parent.tilePosY(pos0.y + cens.y),
+		    yn = m_parent.tilePosY(posf.y + cens.y),
+		    xl = m_parent.tilePosX(pos0.x - cens.x + 2),
 		    xr = m_parent.tilePosX(pos0.x + scen.x - 2);
 		for (int y = yo; y <= yn; y++)
 		{
@@ -106,7 +110,7 @@ void TilemapCharacter::update(float deltaTime)
 			{
 				if (m_parent.isColl(x,y) && onUpCollision(x, y))
 				{
-					posf.y = m_parent.Bottom(y) - cen.y;
+					posf.y = m_parent.Bottom(y) -cens.y;
 					goto vert_exit;	
 				}
 			}
@@ -118,17 +122,17 @@ void TilemapCharacter::update(float deltaTime)
 
 	if (direction.x < 0) //Vamos hacia la izquierda
 	{
-		int xo = m_parent.tilePosX(pos0.x -  cen.x),
-		    xn = m_parent.tilePosX(posf.x -  cen.x),
+		int xo = m_parent.tilePosX(pos0.x - cens.x),
+		    xn = m_parent.tilePosX(posf.x - cens.x),
 		    yb = m_parent.tilePosY(pos0.y - scen.y + 2),
-		    yt = m_parent.tilePosY(pos0.y +  cen.y - 2);
+		    yt = m_parent.tilePosY(pos0.y + cens.y - 2);
 		for (int x = xo; x >= xn; x--)
 		{
 			for (int y = yb; y <= yt; y++)
 			{
 				if (m_parent.isColl(x,y) && onLeftCollision(x, y))
 				{
-					posf.x = m_parent.Right(x) + cen.x;
+					posf.x = m_parent.Right(x) +cens.x;
 					goto horz_exit;
 				}
 			}
@@ -141,7 +145,7 @@ void TilemapCharacter::update(float deltaTime)
 		int xo = m_parent.tilePosX(pos0.x + scen.x),
 		    xn = m_parent.tilePosX(posf.x + scen.x),
 		    yb = m_parent.tilePosY(pos0.y - scen.y + 2),
-		    yt = m_parent.tilePosY(pos0.y +  cen.y - 2);
+		    yt = m_parent.tilePosY(pos0.y + cens.y - 2);
 		for (int x = xo; x <= xn; x++)
 		{
 			for (int y = yb; y <= yt; y++)

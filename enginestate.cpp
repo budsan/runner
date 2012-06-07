@@ -35,7 +35,7 @@ void EngineState::load()
 	player.hasAirJumped = boost::bind(&EngineState::playerHasAirJumped, this);
 	player.hasDashed = boost::bind(&EngineState::playerHasDashed, this);
 
-    music.load_mem("data/sound/A_Airbrushed.ogg");
+	music.load_mem("data/sound/gamemusic.ogg");
 	music.set_source();
 	music.set_loop(true);
 	music.play();
