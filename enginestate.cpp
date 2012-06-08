@@ -51,6 +51,13 @@ void EngineState::unload()
 
 void EngineState::update(float deltaTime)
 {
+	static float debug = 0;
+	debug += deltaTime;
+	while(debug > 1) {
+		std::cerr << "Tic" << std::endl;
+		debug -= 1;
+	}
+
 	if (tutorial_playing)
 	{
 		if (!tutorial_jumped) {
