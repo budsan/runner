@@ -9,7 +9,6 @@ DEFINES += _DEBUG
 TARGET = runner
 
 SOURCES += \
-    enginestate.cpp \
     main.cpp \
     runner.cpp \
     logic/tilemapcharacter.cpp \
@@ -20,15 +19,14 @@ SOURCES += \
 
     
 HEADERS += \
-    enginestate.h \
     runner.h \
-    keys.h \
     logic/tilemapcharacter.h \
     logic/tilemap.h \
     logic/player.h \
     logic/runnertilemap.h \
     logic/generator/runnermapgenerator.h \
-    logic/generator/runnermapchunk.h
+    logic/generator/runnermapchunk.h \
+    logic/action.h
 
 
 

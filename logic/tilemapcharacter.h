@@ -1,7 +1,7 @@
 #pragma once
 
 #include "graphics/spriteanim.h"
-#include "math/vec2.h"
+#include "math/algebra3.h"
 
 #include "tilemap.h"
 

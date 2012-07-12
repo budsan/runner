@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "gameframework/math/vec2.h"
+#include "gameframework/math/algebra3.h"
 #include "gameframework/math/bbox.h"
 
 class World;

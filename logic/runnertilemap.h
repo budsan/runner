@@ -4,7 +4,7 @@
 #include <vector>
 #include "boost/random.hpp"
 
-#include "math/vec2.h"
+#include "math/algebra3.h"
 #include "math/bbox.h"
 #include "graphics/color.h"
 
