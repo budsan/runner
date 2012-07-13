@@ -2,17 +2,17 @@
 #include "action.h"
 #include "runner.h"
 
-#include "gameframework/environment.h"
-#include "gameframework/log.h"
-#include "gameframework/graphics/graphics.h"
-#include "gameframework/audio/emyl.h"
+#include "guyframework/environment.h"
+#include "guyframework/log.h"
+#include "guyframework/graphics/graphics.h"
+#include "guyframework/audio/emyl.h"
 
 #include <memory>
 
-boost::shared_ptr<SpriteAnimData> Player::s_sprData;
+boost::shared_ptr<Guy::SpriteAnimData> Player::s_sprData;
 boost::shared_ptr<emyl::sound> Player::s_sndHdl;
-boost::shared_ptr<ParticleEmitter> Player::s_runEmitter;
-boost::shared_ptr<ParticleEmitter> Player::s_airJumpEmitter;
+boost::shared_ptr<Guy::ParticleEmitter> Player::s_runEmitter;
+boost::shared_ptr<Guy::ParticleEmitter> Player::s_airJumpEmitter;
 ALuint Player::s_sndJump = 0;
 ALuint Player::s_sndAirJump = 0;
 ALuint Player::s_sndDash = 0;
@@ -32,7 +32,7 @@ Player::Player(Tilemap &parent)
 
 void Player::load() {
 	if (s_sprData == NULL) {
-		s_sprData = boost::shared_ptr < SpriteAnimData > (new SpriteAnimData());
+		s_sprData = boost::shared_ptr < Guy::SpriteAnimData > (new Guy::SpriteAnimData());
 		if (!s_sprData->load("data/scripts/runner128.anim")) {
 			s_sprData.reset();
 			//std::cout << "CRITICAL: data/scripts/mario01.anim doesn't exist." << std::endl;
@@ -41,8 +41,8 @@ void Player::load() {
 	}
 
 	if (s_runEmitter == NULL) {
-		s_runEmitter = boost::shared_ptr < ParticleEmitter
-			       > (new ParticleEmitter());
+		s_runEmitter = boost::shared_ptr < Guy::ParticleEmitter
+			       > (new Guy::ParticleEmitter());
 		if (!s_runEmitter->load("data/scripts/runner_dust.emp")) {
 			s_runEmitter.reset();
 			//std::cout  << "CRITICAL: data/scripts/runner_dust.emp doesn't exist." << std::endl;
@@ -50,8 +50,8 @@ void Player::load() {
 	}
 
 	if (s_airJumpEmitter == NULL) {
-		s_airJumpEmitter = boost::shared_ptr < ParticleEmitter
-				   > (new ParticleEmitter());
+		s_airJumpEmitter = boost::shared_ptr < Guy::ParticleEmitter
+				   > (new Guy::ParticleEmitter());
 		if (!s_airJumpEmitter->load("data/scripts/runner_airjump.emp")) {
 			s_airJumpEmitter.reset();
 			//std::cout  << "CRITICAL: data/scripts/runner_airjump.emp doesn't exist." << std::endl;
@@ -105,7 +105,7 @@ void Player::update(float deltaTime) {
 		m_velLim = vel_run;
 		if(m_vel.y > 0) m_vel.y = 0;
 	} else {
-		const ActionManager& state = (Runner&)Environment::instance().getGame();
+		const ActionManager& state = (Runner&)Guy::Environment::instance().getGame();
 
 		if (m_grounded) {
 			m_airJumpLeft = 1;
@@ -196,8 +196,8 @@ void Player::update(float deltaTime) {
 
 	if (m_runEmitter == NULL) {
 		if (s_runEmitter != NULL)
-			m_runEmitter = boost::shared_ptr < ParticleEmitter
-				       > (new ParticleEmitter(*s_runEmitter));
+			m_runEmitter = boost::shared_ptr < Guy::ParticleEmitter
+				       > (new Guy::ParticleEmitter(*s_runEmitter));
 	} else {
 		m_runEmitter->update(deltaTime);
 	}
@@ -293,13 +293,13 @@ void Player::reset() {
 
 	if (m_runEmitter == NULL) {
 		if (s_runEmitter != NULL)
-			m_runEmitter = boost::shared_ptr < ParticleEmitter
-				       > (new ParticleEmitter(*s_runEmitter));
+			m_runEmitter = boost::shared_ptr < Guy::ParticleEmitter
+				       > (new Guy::ParticleEmitter(*s_runEmitter));
 	}
 
 	if (m_airJumpEmitter == NULL) {
 		if (s_airJumpEmitter != NULL)
-			m_airJumpEmitter = boost::shared_ptr < ParticleEmitter
-					   > (new ParticleEmitter(*s_airJumpEmitter));
+			m_airJumpEmitter = boost::shared_ptr < Guy::ParticleEmitter
+					   > (new Guy::ParticleEmitter(*s_airJumpEmitter));
 	}
 }

@@ -1,10 +1,10 @@
 #include "runner.h"
-#include "gameframework/environment.h"
+#include "guyframework/environment.h"
 
 int main(int argc, char *argv[])
 {
-	Game* game = new Runner();
-	Environment &env = Environment::instance();
+	Guy::Game* game = new Runner();
+	Guy::Environment &env = Guy::Environment::instance();
 
 	if (env.init(game)) env.run();
 

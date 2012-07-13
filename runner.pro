@@ -1,8 +1,8 @@
-include(gameframework/gameframework.pri)
+include(guyframework/guyframework.pri)
 
 QT -= core gui
 
-INCLUDEPATH += gameframework/
+INCLUDEPATH += guyframework/
 
 DEFINES += _DEBUG
 

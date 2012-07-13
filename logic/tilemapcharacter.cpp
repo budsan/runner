@@ -197,5 +197,5 @@ bool TilemapCharacter::ensureAnim(std::string name)
 
 void TilemapCharacter::preDrawing()
 {
-	glColor(rgba(1,1,1,1));
+	glColor(Guy::rgba(1,1,1,1));
 }

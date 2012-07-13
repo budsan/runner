@@ -1,8 +1,8 @@
 #pragma once
 
 #include <vector>
-#include "gameframework/math/algebra3.h"
-#include "gameframework/math/bbox.h"
+#include "guyframework/math/algebra3.h"
+#include "guyframework/math/bbox.h"
 
 class World;
 class Tilemap

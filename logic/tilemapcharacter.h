@@ -5,7 +5,7 @@
 
 #include "tilemap.h"
 
-class TilemapCharacter : public SpriteAnim
+class TilemapCharacter : public Guy::SpriteAnim
 {
 public:
 	TilemapCharacter(Tilemap &m_parent);

@@ -1,18 +1,18 @@
 #pragma once
-#include "gameframework/game.h"
+#include "guyframework/game.h"
 
-#include "gameframework/graphics/tools/texthud.h"
-#include "gameframework/graphics/tools/frameshud.h"
-#include "gameframework/graphics/camera2d.h"
-#include "gameframework/tools/transition.h"
-#include "gameframework/input/input.h"
-#include "gameframework/input/keyboardlistener.h"
+#include "guyframework/graphics/tools/texthud.h"
+#include "guyframework/graphics/tools/frameshud.h"
+#include "guyframework/graphics/camera2d.h"
+#include "guyframework/tools/transition.h"
+#include "guyframework/input/input.h"
+#include "guyframework/input/keyboardlistener.h"
 
 #include "logic/runnertilemap.h"
 #include "logic/action.h"
 #include "logic/player.h"
 
-class Runner : public Game, public Input::FocusListener, public KeyboardListener, public ActionManager
+class Runner : public Guy::Game, public Guy::FocusListener, public Guy::KeyboardListener, public ActionManager
 {
 public:
 	Runner();
@@ -32,8 +32,8 @@ protected:
 	void onGainInputFocus();
 	void onLoseInputFocus();
 
-	void onKeyUp(wchar_t unicode, Keyboard::Key key, Keyboard::Mod mods);
-	void onKeyDown(wchar_t unicode, Keyboard::Key key, Keyboard::Mod mods);
+	void onKeyUp(wchar_t unicode, Guy::Keyboard::Key key, Guy::Keyboard::Mod mods);
+	void onKeyDown(wchar_t unicode, Guy::Keyboard::Key key, Guy::Keyboard::Mod mods);
 
 	void startTutorial();
 	void reset();
@@ -49,12 +49,12 @@ protected:
 
 	bool anyKeyDown;
 
-	TextHUD middleText;
-	TextHUD scoreText;
+	Guy::TextHUD middleText;
+	Guy::TextHUD scoreText;
 	float score;
 	int showScore;
 
-	Camera2D camera;
+	Guy::Camera2D camera;
 	RunnerTilemap tilemap;
 	RunnerTilemap backmap;
 	Player player;
@@ -63,8 +63,8 @@ protected:
 
 	float countdown;
 	bool resetTransition;
-	TransitionLinear linear;
+	Guy::TransitionLinear linear;
 
-	FramesHUD frames;
+	Guy::FramesHUD frames;
 };
 

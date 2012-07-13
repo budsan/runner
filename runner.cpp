@@ -1,7 +1,7 @@
 #include "runner.h"
 
-#include "gameframework/environment.h"
-#include "gameframework/log.h"
+#include "guyframework/environment.h"
+#include "guyframework/log.h"
 
 #include <boost/bind.hpp>
 #include <sstream>
@@ -27,11 +27,11 @@ const char *Runner::getVersion()
 
 void Runner::init()
 {
-	Environment &env = Environment::instance();
-	env.setFramesPerSecond(60);
-	env.getScreenManager().setMode(Screen::Mode(1024, 600), false);
+	Guy::Environment &env = Guy::Environment::instance();
+	//env.setFramesPerSecond(60);
+	env.getScreenManager().setMode(Guy::Screen::Mode(1024, 600), false);
 
-	Input &in = env.getInputManager();
+	Guy::Input &in = env.getInputManager();
 	in.addFocusListener(this);
 	in.getKeyboard().addListener(this);
 
@@ -44,22 +44,22 @@ void Runner::load()
 {
 	if (!frames.loadFont("data/font/nibby.ttf"))
 	{
-		printLog("ERROR: Loading frames font\n");
+		Guy::printLog("ERROR: Loading frames font\n");
 	}
 
-	frames.setColor(rgba(1,1,1,1));
+	frames.setColor(Guy::rgba(1,1,1,1));
 
 	camera.init();
 	player.load();
-	backmap.setColor(rgba(0.5f));
+	backmap.setColor(Guy::rgba(0.5f));
 
 	middleText.loadFont("data/font/nibby.ttf", 32);
-	middleText.font()->setAlignment(Font::CENTER);
-	middleText.setColor(rgba(1,1,1,1));
+	middleText.font()->setAlignment(Guy::Font::CENTER);
+	middleText.setColor(Guy::rgba(1,1,1,1));
 	middleText.clampedPos() = math::vec2f(0.5f, 0.5f);
 
 	scoreText.font() =  middleText.font();
-	scoreText.setColor(rgba(1,1,1,1));
+	scoreText.setColor(Guy::rgba(1,1,1,1));
 	scoreText.clampedPos() = math::vec2f(0.5f, 0.925f);
 
 	player.hasJumped = boost::bind(&Runner::playerHasJumped, this);
@@ -186,8 +186,8 @@ void Runner::draw()
 {
 	glDisable(GL_DEPTH_TEST);
 
-	Screen &screen = Environment::instance().getScreenManager();
-	screen.fillWithColor(rgba(0.75f, 0.75f, 0.75f, 1));
+	Guy::Screen &screen = Guy::Environment::instance().getScreenManager();
+	screen.fillWithColor(Guy::rgba(0.75f, 0.75f, 0.75f, 1));
 
 	//BACKTILEMAP
 	camera.setZoom(0.25f);
@@ -222,30 +222,30 @@ void Runner::draw()
 	if (!tutorial_playing) scoreText.draw();
 	middleText.draw();
 
-	if (linear.getPos() > 0) screen.fillWithColor(rgba(0, 0, 0, linear.getPos()));
+	if (linear.getPos() > 0) screen.fillWithColor(Guy::rgba(0, 0, 0, linear.getPos()));
 
 	frames.draw();
 }
 
 void Runner::onGainInputFocus()
 {
-	Environment::instance().resume();
+	Guy::Environment::instance().resume();
 }
 
 void Runner::onLoseInputFocus()
 {
-	Environment::instance().pause();
+	Guy::Environment::instance().pause();
 }
 
-void Runner::onKeyUp(wchar_t unicode, Keyboard::Key key, Keyboard::Mod mods)
+void Runner::onKeyUp(wchar_t unicode, Guy::Keyboard::Key key, Guy::Keyboard::Mod mods)
 {
 	switch(key)
 	{
-	case Keyboard::Key_Up:
+	case Guy::Keyboard::Key_Up:
 		m_actions[Action::Action_Jump].isUp = true;
 		m_actions[Action::Action_Jump].isPressed = false;
 		break;
-	case Keyboard::Key_Right:
+	case Guy::Keyboard::Key_Right:
 		m_actions[Action::Action_Dash].isUp = true;
 		m_actions[Action::Action_Dash].isPressed = false;
 		break;
@@ -254,16 +254,16 @@ void Runner::onKeyUp(wchar_t unicode, Keyboard::Key key, Keyboard::Mod mods)
 	}
 }
 
-void Runner::onKeyDown(wchar_t unicode, Keyboard::Key key, Keyboard::Mod mods)
+void Runner::onKeyDown(wchar_t unicode, Guy::Keyboard::Key key, Guy::Keyboard::Mod mods)
 {
 	anyKeyDown = true;
 	switch(key)
 	{
-	case Keyboard::Key_Up:
+	case Guy::Keyboard::Key_Up:
 		m_actions[Action::Action_Jump].isDown = true;
 		m_actions[Action::Action_Jump].isPressed = true;
 		break;
-	case Keyboard::Key_Right:
+	case Guy::Keyboard::Key_Right:
 		m_actions[Action::Action_Dash].isDown = true;
 		m_actions[Action::Action_Dash].isPressed = true;
 		break;

@@ -1,5 +1,4 @@
-#ifndef RUNNERTILEMAP_H
-#define RUNNERTILEMAP_H
+#pragma once
 
 #include <vector>
 #include "boost/random.hpp"
@@ -23,7 +22,7 @@ public:
 	void setColl(int x, int y, bool col); //set tile collisionable
 	bool  isColl(int x, int y); //is collisionable
 
-	void setColor(const rgba &color) {m_color = color;}
+	void setColor(const Guy::rgba &color) {m_color = color;}
 
 private:
     int m_seed;
@@ -43,9 +42,7 @@ private:
     };
 
     std::vector<chunk> m_chunks;
-    rgba m_color;
+    Guy::rgba m_color;
 
     void generateUntil(int x);
 };
-
-#endif // RUNNERTILEMAP_H

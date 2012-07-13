@@ -30,10 +30,10 @@ public:
 
 private:
 
-	static boost::shared_ptr<SpriteAnimData> s_sprData;
+	static boost::shared_ptr<Guy::SpriteAnimData> s_sprData;
 	static boost::shared_ptr<emyl::sound> s_sndHdl;
-	static boost::shared_ptr<ParticleEmitter> s_runEmitter;
-	static boost::shared_ptr<ParticleEmitter> s_airJumpEmitter;
+	static boost::shared_ptr<Guy::ParticleEmitter> s_runEmitter;
+	static boost::shared_ptr<Guy::ParticleEmitter> s_airJumpEmitter;
 	static ALuint s_sndJump;
 	static ALuint s_sndAirJump;
 	static ALuint s_sndDash;
@@ -52,8 +52,8 @@ private:
 	float m_jumpTimeLeft;
 	float m_dashTimeLeft;
 
-	boost::shared_ptr<ParticleEmitter> m_runEmitter;
-	boost::shared_ptr<ParticleEmitter> m_airJumpEmitter;
+	boost::shared_ptr<Guy::ParticleEmitter> m_runEmitter;
+	boost::shared_ptr<Guy::ParticleEmitter> m_airJumpEmitter;
 
 protected:
 
