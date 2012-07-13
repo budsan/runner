@@ -1,6 +1,8 @@
 #include "tilemapcharacter.h"
 #include "graphics/color.h"
 
+#include <cmath>
+
 TilemapCharacter::TilemapCharacter(Tilemap &parent)
 	: siz(0,0), cen(0,0),
 	  m_acc(0,0), m_vel(0,0), m_fri(0,0), m_velLim(0,0),
@@ -71,8 +73,8 @@ void TilemapCharacter::update(float deltaTime)
 	// la posicion x,y del tilemap hay un tile colisionable. Si lo hay es que
 	// nuestro personaje se va a chochar.
 
-	vec2f sizs = vec2f(siz.x * getScaleWidth(), siz.y * getScaleHeight());
-	vec2f cens = vec2f(cen.x * getScaleWidth(), cen.y * getScaleHeight());
+	vec2f sizs = vec2f(siz.x * std::fabs(getScaleWidth()), siz.y * std::fabs(getScaleHeight()));
+	vec2f cens = vec2f(cen.x * std::fabs(getScaleWidth()), cen.y * std::fabs(getScaleHeight()));
 
 	vec2f scen = sizs-cens;
 	vec2f direction = posf - pos0;

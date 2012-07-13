@@ -8,11 +8,11 @@
 #include "guyframework/input/input.h"
 #include "guyframework/input/keyboardlistener.h"
 
+#include "actionsrunner.h"
 #include "logic/runnertilemap.h"
-#include "logic/action.h"
 #include "logic/player.h"
 
-class Runner : public Guy::Game, public Guy::FocusListener, public Guy::KeyboardListener, public ActionManager
+class Runner : public Guy::Game, public Guy::FocusListener, public Guy::KeyboardListener
 {
 public:
 	Runner();

@@ -35,6 +35,12 @@ void Runner::init()
 	in.addFocusListener(this);
 	in.getKeyboard().addListener(this);
 
+	ActionsRunner *actionsRunner = new ActionsRunner();
+	in.getKeyboard().addListener(actionsRunner);
+
+	std::vector<Actions*> &actions = Actions::instance();
+	actions.push_back(actionsRunner);
+
 	//Keybinds k(NUMPLAYERS, Action_Size);
 	//k[0][Action_Jump].setDefault(SDLK_UP);
 	//k[0][Action_Dash].setDefault(SDLK_RIGHT);
@@ -179,7 +185,7 @@ void Runner::update(float deltaTime)
 
 	//restart input
 	anyKeyDown = false;
-	endOfFrame();
+	Actions::endOfFrameAll();
 }
 
 void Runner::draw()
@@ -239,37 +245,12 @@ void Runner::onLoseInputFocus()
 
 void Runner::onKeyUp(wchar_t unicode, Guy::Keyboard::Key key, Guy::Keyboard::Mod mods)
 {
-	switch(key)
-	{
-	case Guy::Keyboard::Key_Up:
-		m_actions[Action::Action_Jump].isUp = true;
-		m_actions[Action::Action_Jump].isPressed = false;
-		break;
-	case Guy::Keyboard::Key_Right:
-		m_actions[Action::Action_Dash].isUp = true;
-		m_actions[Action::Action_Dash].isPressed = false;
-		break;
-	default:
-		break;
-	}
+
 }
 
 void Runner::onKeyDown(wchar_t unicode, Guy::Keyboard::Key key, Guy::Keyboard::Mod mods)
 {
 	anyKeyDown = true;
-	switch(key)
-	{
-	case Guy::Keyboard::Key_Up:
-		m_actions[Action::Action_Jump].isDown = true;
-		m_actions[Action::Action_Jump].isPressed = true;
-		break;
-	case Guy::Keyboard::Key_Right:
-		m_actions[Action::Action_Dash].isDown = true;
-		m_actions[Action::Action_Dash].isPressed = true;
-		break;
-	default:
-		break;
-	}
 }
 
 void Runner::startTutorial()

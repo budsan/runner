@@ -1,5 +1,5 @@
 #include "player.h"
-#include "action.h"
+#include "actionsrunner.h"
 #include "runner.h"
 
 #include "guyframework/environment.h"
@@ -105,12 +105,12 @@ void Player::update(float deltaTime) {
 		m_velLim = vel_run;
 		if(m_vel.y > 0) m_vel.y = 0;
 	} else {
-		const ActionManager& state = (Runner&)Guy::Environment::instance().getGame();
+		const Actions& state = *Actions::instance()[0];
 
 		if (m_grounded) {
 			m_airJumpLeft = 1;
 			m_groundedTime += deltaTime;
-			m_groundedDash = state.isPressed(Action::Action_Dash);
+			m_groundedDash = state.isPressed(ActionsRunner::Dash);
 			m_dashTimeLeft = dash_time;
 			m_dashing = false;
 
@@ -135,7 +135,7 @@ void Player::update(float deltaTime) {
 		m_velLim = vel_run;
 		m_vel.x = vel_run.x;
 
-		if (state.isDown(Action::Action_Jump)) {
+		if (state.isDown(ActionsRunner::Jump)) {
 			if (m_grounded) {
 				s_sndHdl->play_buffer(s_sndJump, 0);
 				m_jumpTimeLeft = jump_time;
@@ -155,12 +155,12 @@ void Player::update(float deltaTime) {
 			}
 		}
 
-		if (state.isDown(Action::Action_Dash) && !m_grounded) {
+		if (state.isDown(ActionsRunner::Dash) && !m_grounded) {
 			s_sndHdl->play_buffer(s_sndDash, 1);
 			m_dashing = true;
 			if (hasDashed) hasDashed();
 		}
-		if (!state.isPressed(Action::Action_Dash) || m_dashTimeLeft <= 0) {
+		if (!state.isPressed(ActionsRunner::Dash) || m_dashTimeLeft <= 0) {
 			if (m_dashing)
 				s_sndHdl->stop();
 			m_dashing = false;
@@ -173,7 +173,7 @@ void Player::update(float deltaTime) {
 			else
 				m_dashTimeLeft -= deltaTime;
 		} else {
-			if (state.isPressed(Action::Action_Jump) && m_jumpTimeLeft > 0)
+			if (state.isPressed(ActionsRunner::Jump) && m_jumpTimeLeft > 0)
 				m_vel.y = vel_jmp.y;
 			else
 				m_jumpTimeLeft = 0;
