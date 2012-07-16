@@ -2,7 +2,7 @@
 
 #include <cstdlib>
 #include <stdlib.h>
-#include "boost/random.hpp"
+#include <boost/random.hpp>
 
 #include "graphics/primitives.h"
 #include "graphics/color.h"
