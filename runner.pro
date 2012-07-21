@@ -1,8 +1,6 @@
 include(guyframework/guyframework.pri)
 
-QT -= core gui
-
-INCLUDEPATH += guyframework/
+INCLUDEPATH += .
 
 DEFINES += _DEBUG
 

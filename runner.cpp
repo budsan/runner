@@ -5,6 +5,7 @@
 
 #include <boost/bind.hpp>
 #include <sstream>
+#include <ctime>
 
 #define GAME_NAME "Runner"
 #define GAME_VERSION "1337"
@@ -257,7 +258,7 @@ void Runner::startTutorial()
 {
 	player.reset();
 	tilemap.init(0);
-	backmap.init(time(0));
+    backmap.init(std::time(0));
 
 	tutorial_playing = true;
 	tutorial_jumped = false;
