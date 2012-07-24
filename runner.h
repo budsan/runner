@@ -26,8 +26,8 @@ protected:
 	void update(float deltaTime);
 	void draw();
 
-	virtual const char *getName();
-	virtual const char *getVersion();
+	virtual const char *name();
+	virtual const char *version();
 
 	void onGainInputFocus();
 	void onLoseInputFocus();

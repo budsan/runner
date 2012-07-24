@@ -16,12 +16,12 @@ Runner::Runner()
 
 }
 
-const char *Runner::getName()
+const char *Runner::name()
 {
 	return GAME_NAME;
 }
 
-const char *Runner::getVersion()
+const char *Runner::version()
 {
 	return GAME_VERSION;
 }
@@ -30,14 +30,14 @@ void Runner::init()
 {
 	Guy::Environment &env = Guy::Environment::instance();
 	//env.setFramesPerSecond(60);
-	env.getScreenManager().setMode(Guy::Screen::Mode(1024, 600), false);
+	env.screen().setMode(Guy::Screen::Mode(1024, 600), false);
 
-	Guy::Input &in = env.getInputManager();
+	Guy::Input &in = env.input();
 	in.addFocusListener(this);
-	in.getKeyboard().addListener(this);
+	in.keyboard().addListener(this);
 
 	ActionsRunner *actionsRunner = new ActionsRunner();
-	in.getKeyboard().addListener(actionsRunner);
+	in.keyboard().addListener(actionsRunner);
 
 	std::vector<Actions*> &actions = Actions::instance();
 	actions.push_back(actionsRunner);
@@ -193,17 +193,17 @@ void Runner::draw()
 {
 	glDisable(GL_DEPTH_TEST);
 
-	Guy::Screen &screen = Guy::Environment::instance().getScreenManager();
+	Guy::Screen &screen = Guy::Environment::instance().screen();
 	screen.fillWithColor(Guy::rgba(0.75f, 0.75f, 0.75f, 1));
 
 	//BACKTILEMAP
 	camera.setZoom(0.25f);
 	camera.setPos(math::vec2f(player.pos().x+16384, 2048)*0.25f);
 	glMatrixMode(GL_PROJECTION);
-	glLoadMatrixf(camera.getProjectionMatrix().v);
+	glLoadMatrixf(camera.projectionMatrix().v);
 
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(camera.getModelviewMatrix().v);
+	glLoadMatrixf(camera.viewMatrix().v);
 
 	{
 		math::bbox2f frustrum = camera.getBounding();
@@ -215,10 +215,10 @@ void Runner::draw()
 	camera.setZoom(1);
 	camera.setPos(math::vec2f(player.pos().x+224, 224));
 	glMatrixMode(GL_PROJECTION);
-	glLoadMatrixf(camera.getProjectionMatrix().v);
+	glLoadMatrixf(camera.projectionMatrix().v);
 
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(camera.getModelviewMatrix().v);
+	glLoadMatrixf(camera.viewMatrix().v);
 
 	{
 		math::bbox2f frustrum = camera.getBounding();
@@ -229,7 +229,7 @@ void Runner::draw()
 	if (!tutorial_playing) scoreText.draw();
 	middleText.draw();
 
-	if (linear.getPos() > 0) screen.fillWithColor(Guy::rgba(0, 0, 0, linear.getPos()));
+	if (linear.pos() > 0) screen.fillWithColor(Guy::rgba(0, 0, 0, linear.pos()));
 
 	frames.draw();
 }
