@@ -16,6 +16,7 @@ class Runner : public Guy::Game, public Guy::FocusListener, public Guy::Keyboard
 {
 public:
 	Runner();
+    virtual ~Runner();
 
 protected:
 	void init();

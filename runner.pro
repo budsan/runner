@@ -7,7 +7,6 @@ DEFINES += _DEBUG
 TARGET = runner
 
 SOURCES += \
-    main.cpp \
     runner.cpp \
     logic/tilemapcharacter.cpp \
     logic/tilemap.cpp \

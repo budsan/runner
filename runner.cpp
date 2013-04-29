@@ -10,8 +10,15 @@
 #define GAME_NAME "Runner"
 #define GAME_VERSION "1337"
 
+Runner theGame;
+
 Runner::Runner()
 	: tilemap(24, 16, true), backmap(16, 256, false), player(tilemap)
+{
+
+}
+
+Runner::~Runner()
 {
 
 }
