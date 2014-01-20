@@ -1,9 +1,9 @@
 #include "runner.h"
 
 #include "guyframework/environment.h"
-#include "guyframework/log.h"
+#include "guyframework/debug.h"
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <sstream>
 #include <ctime>
 
@@ -76,9 +76,9 @@ void Runner::load()
 	scoreText.setColor(Guy::rgba(1,1,1,1));
 	scoreText.clampedPos() = math::vec2f(0.5f, 0.925f);
 
-	player.hasJumped = boost::bind(&Runner::playerHasJumped, this);
-	player.hasAirJumped = boost::bind(&Runner::playerHasAirJumped, this);
-	player.hasDashed = boost::bind(&Runner::playerHasDashed, this);
+	player.hasJumped = std::bind(&Runner::playerHasJumped, this);
+	player.hasAirJumped = std::bind(&Runner::playerHasAirJumped, this);
+	player.hasDashed = std::bind(&Runner::playerHasDashed, this);
 
 	music.load_mem("data/sound/gamemusic.ogg");
 	music.set_source();
@@ -94,7 +94,7 @@ void Runner::unload()
 
 }
 
-void Runner::update(float deltaTime)
+void Runner::update(double deltaTime)
 {
 	frames.update(deltaTime);
 
@@ -265,7 +265,7 @@ void Runner::startTutorial()
 {
 	player.reset();
 	tilemap.init(0);
-    backmap.init(std::time(0));
+	backmap.init(std::time(0));
 
 	tutorial_playing = true;
 	tutorial_jumped = false;

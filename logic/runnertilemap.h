@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "boost/random.hpp"
+#include <random>
 
 #include "math/algebra3.h"
 #include "math/bbox.h"
@@ -12,11 +12,11 @@
 class RunnerTilemap : public Tilemap
 {
 public:
-	RunnerTilemap(float m_unitsPerTile, int maxHeight, bool ceils);
+	RunnerTilemap(double m_unitsPerTile, int maxHeight, bool ceils);
 	virtual ~RunnerTilemap() {}
 
     void init(int seed);
-	void update(float deltaTime);
+	void update(double deltaTime);
 	void draw(const math::bbox2f &screen);
 
 	void setColl(int x, int y, bool col); //set tile collisionable
@@ -28,7 +28,7 @@ private:
     int m_seed;
     int m_maxHeight;
     bool m_ceils;
-    boost::mt19937 m_random;
+    std::default_random_engine m_random;
 
     struct chunk {
 	    chunk() : height(0), ceil(0) {}

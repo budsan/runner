@@ -1,8 +1,7 @@
 #pragma once
 
-#include "boost/shared_ptr.hpp"
-#include "boost/bind.hpp"
-#include "boost/function.hpp"
+#include <memory>
+#include <functional>
 
 #include "audio/emyl.h"
 #include "tools/particleemitter.h"
@@ -14,7 +13,7 @@ class Player : public TilemapCharacter
 {
 public:
 	Player(Tilemap &parent);
-	virtual void update(float deltaTime);
+	virtual void update(double deltaTime);
 
 	static void load();
 	static bool loaded();
@@ -23,17 +22,17 @@ public:
 
 	bool failed() { return m_failed; }
 
-	boost::function<void()> hasFailed;
-	boost::function<void()> hasJumped;
-	boost::function<void()> hasAirJumped;
-	boost::function<void()> hasDashed;
+	std::function<void()> hasFailed;
+	std::function<void()> hasJumped;
+	std::function<void()> hasAirJumped;
+	std::function<void()> hasDashed;
 
 private:
 
-	static boost::shared_ptr<Guy::SpriteAnimData> s_sprData;
-	static boost::shared_ptr<emyl::sound> s_sndHdl;
-	static boost::shared_ptr<Guy::ParticleEmitter> s_runEmitter;
-	static boost::shared_ptr<Guy::ParticleEmitter> s_airJumpEmitter;
+	static std::shared_ptr<Guy::SpriteAnimData> s_sprData;
+	static std::shared_ptr<emyl::sound> s_sndHdl;
+	static std::shared_ptr<Guy::ParticleEmitter> s_runEmitter;
+	static std::shared_ptr<Guy::ParticleEmitter> s_airJumpEmitter;
 	static ALuint s_sndJump;
 	static ALuint s_sndAirJump;
 	static ALuint s_sndDash;
@@ -47,13 +46,13 @@ private:
 	bool m_groundedDash;
 
 	int m_airJumpLeft;
-	float m_almostFailTime;
-	float m_groundedTime;
-	float m_jumpTimeLeft;
-	float m_dashTimeLeft;
+	double m_almostFailTime;
+	double m_groundedTime;
+	double m_jumpTimeLeft;
+	double m_dashTimeLeft;
 
-	boost::shared_ptr<Guy::ParticleEmitter> m_runEmitter;
-	boost::shared_ptr<Guy::ParticleEmitter> m_airJumpEmitter;
+	std::shared_ptr<Guy::ParticleEmitter> m_runEmitter;
+	std::shared_ptr<Guy::ParticleEmitter> m_airJumpEmitter;
 
 protected:
 

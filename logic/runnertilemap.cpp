@@ -2,7 +2,7 @@
 
 #include <cstdlib>
 #include <stdlib.h>
-#include <boost/random.hpp>
+#include <random>
 
 #include "graphics/primitives.h"
 #include "graphics/color.h"
@@ -40,9 +40,9 @@ inline void drawVertexArray(unsigned short count)
 
 
 
-#define RESTORE_TIME_DELETED_TILES 5.0f
+#define RESTORE_TIME_DELETED_TILES 5.0
 
-RunnerTilemap::RunnerTilemap(float unitsPerTile, int maxHeight, bool ceils)
+RunnerTilemap::RunnerTilemap(double unitsPerTile, int maxHeight, bool ceils)
 	: Tilemap(unitsPerTile), m_maxHeight(maxHeight), m_color(0), m_ceils(ceils)
 {
 
@@ -51,7 +51,7 @@ RunnerTilemap::RunnerTilemap(float unitsPerTile, int maxHeight, bool ceils)
 void RunnerTilemap::init(int seed)
 {
 	this->m_seed = seed;
-	m_random = boost::mt19937(seed);
+	m_random = std::default_random_engine(seed);
 	m_chunks.resize(60);
 }
 
@@ -67,7 +67,7 @@ bool RunnerTilemap::isColl(int x, int y)
 	return (y < 0) || (cur.height > y) || ((int)cur.ceil > 4 && (int)(cur.ceil + cur.height) < y );
 }
 
-void RunnerTilemap::update(float deltaTime)
+void RunnerTilemap::update(double deltaTime)
 {
 
 }

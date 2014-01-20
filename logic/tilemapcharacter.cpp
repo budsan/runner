@@ -11,13 +11,13 @@ TilemapCharacter::TilemapCharacter(Tilemap &parent)
 
 }
 
-void TilemapCharacter::update(float deltaTime)
+void TilemapCharacter::update(double deltaTime)
 {
-	using math::vec2f;
-	vec2f pos0 = m_pos; //pos0: posicion inicial
+	using math::vec2d;
+	vec2d pos0 = m_pos; //pos0: posicion inicial
 
 	//uniformly accelerated linear motion, posf: posicion final
-	vec2f posf = pos0 + m_vel*deltaTime + m_acc*deltaTime*deltaTime*0.5f;
+	vec2d posf = pos0 + m_vel*deltaTime + m_acc*deltaTime*deltaTime*0.5f;
 	m_vel = m_vel + m_acc*deltaTime;
 
 	//FRICTION
@@ -73,11 +73,11 @@ void TilemapCharacter::update(float deltaTime)
 	// la posicion x,y del tilemap hay un tile colisionable. Si lo hay es que
 	// nuestro personaje se va a chochar.
 
-	vec2f sizs = vec2f(siz.x * std::fabs(getScaleWidth()), siz.y * std::fabs(getScaleHeight()));
-	vec2f cens = vec2f(cen.x * std::fabs(getScaleWidth()), cen.y * std::fabs(getScaleHeight()));
+	vec2d sizs = vec2d(siz.x * std::fabs(getScaleWidth()), siz.y * std::fabs(getScaleHeight()));
+	vec2d cens = vec2d(cen.x * std::fabs(getScaleWidth()), cen.y * std::fabs(getScaleHeight()));
 
-	vec2f scen = sizs-cens;
-	vec2f direction = posf - pos0;
+	vec2d scen = sizs-cens;
+	vec2d direction = posf - pos0;
 	if (direction.y < 0) //Vamos hacia abajo
 	{
 		//le restamos a la Y la mitad de su tamaño para obtener la Y inferior del sprite
@@ -187,10 +187,10 @@ bool TilemapCharacter::ensureAnim(std::string name)
 
 		Sprite::drawParams params;
 		getParamsToDraw(params);
-		siz.x = (float) params.w;
-		siz.y = (float) params.h;
-		cen.x = (float) params.cx;
-		cen.y = (float) params.cy;
+		siz.x = (double) params.w;
+		siz.y = (double) params.h;
+		cen.x = (double) params.cx;
+		cen.y = (double) params.cy;
 		return true;
 	}
 

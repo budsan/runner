@@ -24,7 +24,7 @@ protected:
 	void   load();
 	void unload();
 
-	void update(float deltaTime);
+	void update(double deltaTime);
 	void draw();
 
 	virtual const char *name();
@@ -52,7 +52,7 @@ protected:
 
 	Guy::TextHUD middleText;
 	Guy::TextHUD scoreText;
-	float score;
+	double score;
 	int showScore;
 
 	Guy::Camera2D camera;
@@ -62,7 +62,7 @@ protected:
 
 	emyl::stream music;
 
-	float countdown;
+	double countdown;
 	bool resetTransition;
 	Guy::TransitionLinear linear;
 

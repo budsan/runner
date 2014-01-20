@@ -9,17 +9,17 @@ class TilemapCharacter : public Guy::SpriteAnim
 {
 public:
 	TilemapCharacter(Tilemap &m_parent);
-	virtual void update(float deltaTime);
+	virtual void update(double deltaTime);
 private:
-	math::vec2f siz;
-	math::vec2f cen;
+	math::vec2d siz;
+	math::vec2d cen;
 
 protected:
-	math::vec2f m_acc;
-	math::vec2f m_vel;
-	math::vec2f m_fri;
-	math::vec2f m_velLim;
-	float m_animVelFactor;
+	math::vec2d m_acc;
+	math::vec2d m_vel;
+	math::vec2d m_fri;
+	math::vec2d m_velLim;
+	double m_animVelFactor;
 
 	bool ensureAnim(std::string name);
 
