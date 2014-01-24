@@ -11,7 +11,7 @@
 static float vertcoords[VERTEX_ARRAY_SIZE * 8];
 static unsigned short indices[VERTEX_ARRAY_SIZE * 6];
 
-inline void fillVertexArray(unsigned short offset, const math::bbox2f &quad)
+inline void fillVertexArray(unsigned short offset, const math::bbox2d &quad)
 {
 	vertcoords[offset*8 + 0] = quad.min.x;
 	vertcoords[offset*8 + 1] = quad.min.y;
@@ -43,7 +43,7 @@ inline void drawVertexArray(unsigned short count)
 #define RESTORE_TIME_DELETED_TILES 5.0
 
 RunnerTilemap::RunnerTilemap(double unitsPerTile, int maxHeight, bool ceils)
-	: Tilemap(unitsPerTile), m_maxHeight(maxHeight), m_color(0), m_ceils(ceils)
+	: Tilemap(unitsPerTile), m_maxHeight(maxHeight), m_ceils(ceils), m_color(0)
 {
 
 }
@@ -57,6 +57,10 @@ void RunnerTilemap::init(int seed)
 
 void RunnerTilemap::setColl(int x, int y, bool col)
 {
+	(void) x;
+	(void) y;
+	(void) col;
+
 	return; //DO NOTHING
 }
 
@@ -69,10 +73,10 @@ bool RunnerTilemap::isColl(int x, int y)
 
 void RunnerTilemap::update(double deltaTime)
 {
-
+	(void) deltaTime;
 }
 
-void RunnerTilemap::draw(const math::bbox2f &screen)
+void RunnerTilemap::draw(const math::bbox2d &screen)
 {
 	math::vec2i start = tilePos(screen.min);
 	math::vec2i end   = tilePos(screen.max) + math::vec2i(1,1);
@@ -88,9 +92,9 @@ void RunnerTilemap::draw(const math::bbox2f &screen)
 	glColor(m_color);
 	if (start.y < 0)
 	{
-		math::bbox2f quad(
-			math::vec2f((float)start.x,(float) start.y)*m_unitsPerTile,
-			math::vec2f((float)1+end.x,(float)       0)*m_unitsPerTile);
+		math::bbox2d quad(
+			math::vec2d((double)start.x,(double) start.y)*m_unitsPerTile,
+			math::vec2d((double)1+end.x,(double)       0)*m_unitsPerTile);
 
 		fillVertexArray(0, quad);
 		drawVertexArray(1);
@@ -111,9 +115,9 @@ void RunnerTilemap::draw(const math::bbox2f &screen)
 			if (!lastColl && currColl) lastColly = j;
 			else if (lastColl && !currColl)
 			{
-				math::bbox2f quad(
-					math::vec2f((float) i+0,(float) lastColly)*m_unitsPerTile,
-					math::vec2f((float) i+1,(float)         j)*m_unitsPerTile);
+				math::bbox2d quad(
+					math::vec2d((double) i+0,(double) lastColly)*m_unitsPerTile,
+					math::vec2d((double) i+1,(double)         j)*m_unitsPerTile);
 
 				fillVertexArray(c, quad);
 				if (++c == VERTEX_ARRAY_SIZE) {
@@ -127,9 +131,9 @@ void RunnerTilemap::draw(const math::bbox2f &screen)
 
 		if (lastColl)
 		{
-			math::bbox2f quad(
-				math::vec2f((float) i+0,(float) lastColly)*m_unitsPerTile,
-				math::vec2f((float) i+1,(float)     end.y)*m_unitsPerTile);
+			math::bbox2d quad(
+				math::vec2d((double) i+0,(double) lastColly)*m_unitsPerTile,
+				math::vec2d((double) i+1,(double)     end.y)*m_unitsPerTile);
 
 			fillVertexArray(c, quad);
 			if (++c == VERTEX_ARRAY_SIZE) {
@@ -144,7 +148,7 @@ void RunnerTilemap::draw(const math::bbox2f &screen)
 
 void RunnerTilemap::generateUntil(int x)
 {
-	int i = m_chunks.size();
+	std::size_t i = m_chunks.size();
 	while (i <= x)
 	{
 		chunk& last = m_chunks.back();

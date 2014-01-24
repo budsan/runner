@@ -173,10 +173,10 @@ void TilemapCharacter::noRightCollision(){}
 void TilemapCharacter::noUpCollision()   {}
 void TilemapCharacter::noDownCollision() {}
 
-bool TilemapCharacter::onLeftCollision(int x, int j) {return true;}
-bool TilemapCharacter::onRightCollision(int x, int j){return true;}
-bool TilemapCharacter::onUpCollision(int x, int j)   {return true;}
-bool TilemapCharacter::onDownCollision(int x, int j) {return true;}
+bool TilemapCharacter::onLeftCollision(int x, int j) {(void)x; (void)j; return true;}
+bool TilemapCharacter::onRightCollision(int x, int j){(void)x; (void)j; return true;}
+bool TilemapCharacter::onUpCollision(int x, int j)   {(void)x; (void)j; return true;}
+bool TilemapCharacter::onDownCollision(int x, int j) {(void)x; (void)j; return true;}
 
 bool TilemapCharacter::ensureAnim(std::string name)
 {

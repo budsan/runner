@@ -17,7 +17,7 @@ public:
 
     void init(int seed);
 	void update(double deltaTime);
-	void draw(const math::bbox2f &screen);
+	void draw(const math::bbox2d &screen);
 
 	void setColl(int x, int y, bool col); //set tile collisionable
 	bool  isColl(int x, int y); //is collisionable

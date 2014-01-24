@@ -255,17 +255,20 @@ void Player::noDownCollision() {
 }
 
 bool Player::onLeftCollision(int x, int j) {
+	(void) x; (void) j;
 	m_vel.x = 0;
 	return true;
 }
 
 bool Player::onRightCollision(int x, int j) {
+	(void) x; (void) j;
 	m_almostFail = true;
 	m_vel.x = 0;
 	return true;
 }
 
 bool Player::onUpCollision(int x, int j) {
+	(void) x; (void) j;
 	m_vel.y = 0;
 	m_jumpTimeLeft = 0;
 	m_grounded = false;
@@ -273,6 +276,7 @@ bool Player::onUpCollision(int x, int j) {
 }
 
 bool Player::onDownCollision(int x, int j) {
+	(void) x; (void) j;
 	m_vel.y = 0;
 	m_grounded = true;
 	return true;

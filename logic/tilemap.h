@@ -8,24 +8,24 @@ class World;
 class Tilemap
 {
 public:
-	Tilemap(float unitsPerTile);
+	Tilemap(double unitsPerTile);
 	virtual ~Tilemap() {}
 
 	virtual void setColl(int x, int y, bool col) = 0; //set tile collisionable
 	virtual bool  isColl(int x, int y) = 0; //is collisionable
 
 	//what tile is in world coordinate
-	math::vec2i tilePos(math::vec2f pos); 
-	math::vec2i tilePos(float x, float y);
-	int tilePosX(float x);
-	int tilePosY(float y);
+	math::vec2i tilePos(math::vec2d pos);
+	math::vec2i tilePos(double x, double y);
+	int tilePosX(double x);
+	int tilePosY(double y);
 
-	float Top(int y);
-	float Bottom(int y);
+	double Top(int y);
+	double Bottom(int y);
 
-	float Left(int x);
-	float Right(int x);
+	double Left(int x);
+	double Right(int x);
 
 protected:
-	float m_unitsPerTile;
+	double m_unitsPerTile;
 };

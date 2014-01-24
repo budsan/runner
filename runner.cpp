@@ -134,7 +134,7 @@ void Runner::update(double deltaTime)
 	{
 		if (countdown >= -1)
 		{
-			static char * readyStrings[] = { "GO FOR IT!!! :D", "One!!!", "Two!!", "Three!" };
+			static const char* readyStrings[] = { "GO FOR IT!!! :D", "One!!!", "Two!!", "Three!" };
 			int select = (int) floor(countdown);
 			countdown -= deltaTime * 2;
 
@@ -213,7 +213,7 @@ void Runner::draw()
 	glLoadMatrixf(camera.viewMatrix().v);
 
 	{
-		math::bbox2f frustrum = camera.getBounding();
+		math::bbox2d frustrum = camera.getBounding();
 		backmap.draw(frustrum);
 	}
 
@@ -236,7 +236,7 @@ void Runner::draw()
 	if (!tutorial_playing) scoreText.draw();
 	middleText.draw();
 
-	if (linear.pos() > 0) screen.fillWithColor(Guy::rgba(0, 0, 0, linear.pos()));
+	if (linear.pos() > 0) screen.fillWithColor(Guy::rgba(0, 0, 0, static_cast<float>(linear.pos())));
 
 	frames.draw();
 }
@@ -253,11 +253,17 @@ void Runner::onLoseInputFocus()
 
 void Runner::onKeyUp(wchar_t unicode, Guy::Keyboard::Key key, Guy::Keyboard::Mod mods)
 {
-
+	(void) unicode;
+	(void) key;
+	(void) mods;
 }
 
 void Runner::onKeyDown(wchar_t unicode, Guy::Keyboard::Key key, Guy::Keyboard::Mod mods)
 {
+	(void) unicode;
+	(void) key;
+	(void) mods;
+
 	anyKeyDown = true;
 }
 
@@ -265,7 +271,7 @@ void Runner::startTutorial()
 {
 	player.reset();
 	tilemap.init(0);
-	backmap.init(std::time(0));
+	backmap.init(static_cast<int>(std::time(0)));
 
 	tutorial_playing = true;
 	tutorial_jumped = false;

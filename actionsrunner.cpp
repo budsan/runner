@@ -8,6 +8,8 @@ ActionsRunner::ActionsRunner() : Actions(ActionCount)
 
 void ActionsRunner::onKeyUp(wchar_t unicode, Guy::Keyboard::Key key, Guy::Keyboard::Mod mods)
 {
+	(void) unicode; (void) mods;
+
 	switch(key)
 	{
 	case Guy::Keyboard::Key_Up:
@@ -23,6 +25,8 @@ void ActionsRunner::onKeyUp(wchar_t unicode, Guy::Keyboard::Key key, Guy::Keyboa
 
 void ActionsRunner::onKeyDown(wchar_t unicode, Guy::Keyboard::Key key, Guy::Keyboard::Mod mods)
 {
+	(void) unicode; (void) mods;
+
 	switch(key)
 	{
 	case Guy::Keyboard::Key_Up:
