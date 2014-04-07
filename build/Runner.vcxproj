@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{D23E840A-1510-4846-8F1D-8376351F446B}</ProjectGuid>
+    <RootNamespace>Runner</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>..\guyframework;..\guyframework\extlibs\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\guyframework\extlibs\libs-msvc\x86\Debug;..\guyframework\extlibs\libs-msvc\x86;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>..\guyframework;..\guyframework\extlibs\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\guyframework\extlibs\libs-msvc\x86\Release;..\guyframework\extlibs\libs-msvc\x86;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>..\guyframework;..\guyframework\extlibs\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\guyframework\extlibs\libs-msvc\x64\Debug;..\guyframework\extlibs\libs-msvc\x64\;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>..\guyframework;..\guyframework\extlibs\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\guyframework\extlibs\libs-msvc\x64\Release;..\guyframework\extlibs\libs-msvc\x64\;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_USE_MATH_DEFINES;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;GUY_USE_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>OpenGL32.lib;OpenAL32.lib;SDL2.lib;freetype.lib;libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_USE_MATH_DEFINES;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;GUY_USE_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>OpenGL32.lib;OpenAL32.lib;SDL2.lib;freetype.lib;libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_USE_MATH_DEFINES;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;GUY_USE_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>OpenGL32.lib;OpenAL32.lib;SDL2.lib;freetype.lib;libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_USE_MATH_DEFINES;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;GUY_USE_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>OpenGL32.lib;OpenAL32.lib;SDL2.lib;freetype.lib;libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\guyframework\audio\emyl.h" />
+    <ClInclude Include="..\guyframework\debug.h" />
+    <ClInclude Include="..\guyframework\environment.h" />
+    <ClInclude Include="..\guyframework\environments\sdl\sdlenvironment.h" />
+    <ClInclude Include="..\guyframework\environments\sdl\sdlinput.h" />
+    <ClInclude Include="..\guyframework\environments\sdl\sdlscreen.h" />
+    <ClInclude Include="..\guyframework\environments\win\graphics.h" />
+    <ClInclude Include="..\guyframework\environments\win\winenvironment.h" />
+    <ClInclude Include="..\guyframework\environments\win\winpersistencelayer.h" />
+    <ClInclude Include="..\guyframework\game.h" />
+    <ClInclude Include="..\guyframework\graphics\camera.h" />
+    <ClInclude Include="..\guyframework\graphics\camera2d.h" />
+    <ClInclude Include="..\guyframework\graphics\color.h" />
+    <ClInclude Include="..\guyframework\graphics\effect.h" />
+    <ClInclude Include="..\guyframework\graphics\font.h" />
+    <ClInclude Include="..\guyframework\graphics\framebuffer.h" />
+    <ClInclude Include="..\guyframework\graphics\graphics.h" />
+    <ClInclude Include="..\guyframework\graphics\gui\frameshud.h" />
+    <ClInclude Include="..\guyframework\graphics\gui\texthud.h" />
+    <ClInclude Include="..\guyframework\graphics\mesh.h" />
+    <ClInclude Include="..\guyframework\graphics\model.h" />
+    <ClInclude Include="..\guyframework\graphics\primitives.h" />
+    <ClInclude Include="..\guyframework\graphics\renderstate.h" />
+    <ClInclude Include="..\guyframework\graphics\screen.h" />
+    <ClInclude Include="..\guyframework\graphics\shader.h" />
+    <ClInclude Include="..\guyframework\graphics\shaderprogram.h" />
+    <ClInclude Include="..\guyframework\graphics\sprite.h" />
+    <ClInclude Include="..\guyframework\graphics\spriteanim.h" />
+    <ClInclude Include="..\guyframework\graphics\spritestatic.h" />
+    <ClInclude Include="..\guyframework\graphics\texture.h" />
+    <ClInclude Include="..\guyframework\graphics\texturemanager.h" />
+    <ClInclude Include="..\guyframework\graphics\vertexattribute.h" />
+    <ClInclude Include="..\guyframework\input\controller.h" />
+    <ClInclude Include="..\guyframework\input\focuslistener.h" />
+    <ClInclude Include="..\guyframework\input\gamepad.h" />
+    <ClInclude Include="..\guyframework\input\gamepadlistener.h" />
+    <ClInclude Include="..\guyframework\input\input.h" />
+    <ClInclude Include="..\guyframework\input\keyboard.h" />
+    <ClInclude Include="..\guyframework\input\keyboardlistener.h" />
+    <ClInclude Include="..\guyframework\math\algebra3.h" />
+    <ClInclude Include="..\guyframework\math\bbox.h" />
+    <ClInclude Include="..\guyframework\persistencelayer.h" />
+    <ClInclude Include="..\guyframework\tools\particle.h" />
+    <ClInclude Include="..\guyframework\tools\particleemitter.h" />
+    <ClInclude Include="..\guyframework\tools\transition.h" />
+    <ClInclude Include="..\guyframework\variable.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\guyframework\audio\emyl.cpp" />
+    <ClCompile Include="..\guyframework\environment.cpp" />
+    <ClCompile Include="..\guyframework\environments\sdl\sdlenvironment.cpp" />
+    <ClCompile Include="..\guyframework\environments\sdl\sdlinput.cpp" />
+    <ClCompile Include="..\guyframework\environments\sdl\sdlscreen.cpp" />
+    <ClCompile Include="..\guyframework\environments\win\glew.c" />
+    <ClCompile Include="..\guyframework\environments\win\winenvironment.cpp" />
+    <ClCompile Include="..\guyframework\environments\win\winlog.cpp" />
+    <ClCompile Include="..\guyframework\environments\win\winmain.cpp" />
+    <ClCompile Include="..\guyframework\environments\win\winpersistencelayer.cpp" />
+    <ClCompile Include="..\guyframework\game.cpp" />
+    <ClCompile Include="..\guyframework\graphics\camera2d.cpp" />
+    <ClCompile Include="..\guyframework\graphics\color.cpp" />
+    <ClCompile Include="..\guyframework\graphics\effect.cpp" />
+    <ClCompile Include="..\guyframework\graphics\font.cpp" />
+    <ClCompile Include="..\guyframework\graphics\framebuffer.cpp" />
+    <ClCompile Include="..\guyframework\graphics\graphics.cpp" />
+    <ClCompile Include="..\guyframework\graphics\gui\frameshud.cpp" />
+    <ClCompile Include="..\guyframework\graphics\gui\texthud.cpp" />
+    <ClCompile Include="..\guyframework\graphics\mesh.cpp" />
+    <ClCompile Include="..\guyframework\graphics\model.cpp" />
+    <ClCompile Include="..\guyframework\graphics\primitives.cpp" />
+    <ClCompile Include="..\guyframework\graphics\renderstate.cpp" />
+    <ClCompile Include="..\guyframework\graphics\screen.cpp" />
+    <ClCompile Include="..\guyframework\graphics\shader.cpp" />
+    <ClCompile Include="..\guyframework\graphics\shaderprogram.cpp" />
+    <ClCompile Include="..\guyframework\graphics\sprite.cpp" />
+    <ClCompile Include="..\guyframework\graphics\spriteanim.cpp" />
+    <ClCompile Include="..\guyframework\graphics\spritestatic.cpp" />
+    <ClCompile Include="..\guyframework\graphics\texture.cpp" />
+    <ClCompile Include="..\guyframework\graphics\texturemanager.cpp" />
+    <ClCompile Include="..\guyframework\graphics\vertexattribute.cpp" />
+    <ClCompile Include="..\guyframework\input\controller.cpp" />
+    <ClCompile Include="..\guyframework\input\gamepad.cpp" />
+    <ClCompile Include="..\guyframework\input\input.cpp" />
+    <ClCompile Include="..\guyframework\input\keyboard.cpp" />
+    <ClCompile Include="..\guyframework\persistencelayer.cpp" />
+    <ClCompile Include="..\guyframework\tools\particle.cpp" />
+    <ClCompile Include="..\guyframework\tools\particleemitter.cpp" />
+    <ClCompile Include="..\guyframework\tools\transition.cpp" />
+    <ClCompile Include="..\guyframework\variable.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

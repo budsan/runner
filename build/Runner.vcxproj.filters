@@ -1,0 +1,300 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="guyframework">
+      <UniqueIdentifier>{0f5fbf08-5a63-47c0-b147-8619f9545ccd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="guyframework\audio">
+      <UniqueIdentifier>{8471d8a8-a063-42b4-9421-9e94cb303762}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="guyframework\environments">
+      <UniqueIdentifier>{0f6bba31-1a64-432e-bb58-e93cce825b42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="guyframework\environments\sdl">
+      <UniqueIdentifier>{065b7acc-1d34-4e2e-9a07-9fd9fade2d48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="guyframework\environments\win">
+      <UniqueIdentifier>{93a1c0d9-6549-4abd-be07-c818538f5537}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="guyframework\graphics">
+      <UniqueIdentifier>{d420d89f-17ab-45d6-bc2a-66e9b8b19d9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="guyframework\graphics\gui">
+      <UniqueIdentifier>{353e1755-79d8-4c06-bd7c-1e1ab71000e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="guyframework\input">
+      <UniqueIdentifier>{8b214565-132d-4965-8d8c-2aa799b1e4e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="guyframework\math">
+      <UniqueIdentifier>{2270227b-e920-4cda-8a55-efd8223262ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="guyframework\extra">
+      <UniqueIdentifier>{51529257-e0ce-4d27-8d53-c8154f3da6b2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\guyframework\environment.h">
+      <Filter>guyframework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\game.h">
+      <Filter>guyframework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\persistencelayer.h">
+      <Filter>guyframework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\variable.h">
+      <Filter>guyframework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\debug.h">
+      <Filter>guyframework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\audio\emyl.h">
+      <Filter>guyframework\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\environments\win\winenvironment.h">
+      <Filter>guyframework\environments\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\environments\win\winpersistencelayer.h">
+      <Filter>guyframework\environments\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\environments\win\graphics.h">
+      <Filter>guyframework\environments\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\environments\sdl\sdlenvironment.h">
+      <Filter>guyframework\environments\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\environments\sdl\sdlinput.h">
+      <Filter>guyframework\environments\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\environments\sdl\sdlscreen.h">
+      <Filter>guyframework\environments\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\graphics\screen.h">
+      <Filter>guyframework\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\graphics\shader.h">
+      <Filter>guyframework\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\graphics\shaderprogram.h">
+      <Filter>guyframework\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\graphics\sprite.h">
+      <Filter>guyframework\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\graphics\spriteanim.h">
+      <Filter>guyframework\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\graphics\spritestatic.h">
+      <Filter>guyframework\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\graphics\texture.h">
+      <Filter>guyframework\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\graphics\texturemanager.h">
+      <Filter>guyframework\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\graphics\vertexattribute.h">
+      <Filter>guyframework\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\graphics\camera.h">
+      <Filter>guyframework\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\graphics\camera2d.h">
+      <Filter>guyframework\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\graphics\color.h">
+      <Filter>guyframework\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\graphics\effect.h">
+      <Filter>guyframework\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\graphics\font.h">
+      <Filter>guyframework\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\graphics\framebuffer.h">
+      <Filter>guyframework\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\graphics\graphics.h">
+      <Filter>guyframework\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\graphics\mesh.h">
+      <Filter>guyframework\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\graphics\model.h">
+      <Filter>guyframework\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\graphics\primitives.h">
+      <Filter>guyframework\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\graphics\renderstate.h">
+      <Filter>guyframework\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\graphics\gui\frameshud.h">
+      <Filter>guyframework\graphics\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\graphics\gui\texthud.h">
+      <Filter>guyframework\graphics\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\input\controller.h">
+      <Filter>guyframework\input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\input\focuslistener.h">
+      <Filter>guyframework\input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\input\gamepad.h">
+      <Filter>guyframework\input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\input\gamepadlistener.h">
+      <Filter>guyframework\input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\input\input.h">
+      <Filter>guyframework\input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\input\keyboard.h">
+      <Filter>guyframework\input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\input\keyboardlistener.h">
+      <Filter>guyframework\input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\math\bbox.h">
+      <Filter>guyframework\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\math\algebra3.h">
+      <Filter>guyframework\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\tools\particle.h">
+      <Filter>guyframework\extra</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\tools\particleemitter.h">
+      <Filter>guyframework\extra</Filter>
+    </ClInclude>
+    <ClInclude Include="..\guyframework\tools\transition.h">
+      <Filter>guyframework\extra</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\guyframework\game.cpp">
+      <Filter>guyframework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\persistencelayer.cpp">
+      <Filter>guyframework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\variable.cpp">
+      <Filter>guyframework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\environment.cpp">
+      <Filter>guyframework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\audio\emyl.cpp">
+      <Filter>guyframework\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\environments\win\winenvironment.cpp">
+      <Filter>guyframework\environments\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\environments\win\winlog.cpp">
+      <Filter>guyframework\environments\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\environments\win\winmain.cpp">
+      <Filter>guyframework\environments\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\environments\win\winpersistencelayer.cpp">
+      <Filter>guyframework\environments\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\environments\win\glew.c">
+      <Filter>guyframework\environments\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\environments\sdl\sdlenvironment.cpp">
+      <Filter>guyframework\environments\sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\environments\sdl\sdlinput.cpp">
+      <Filter>guyframework\environments\sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\environments\sdl\sdlscreen.cpp">
+      <Filter>guyframework\environments\sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\graphics\shader.cpp">
+      <Filter>guyframework\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\graphics\shaderprogram.cpp">
+      <Filter>guyframework\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\graphics\sprite.cpp">
+      <Filter>guyframework\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\graphics\spriteanim.cpp">
+      <Filter>guyframework\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\graphics\spritestatic.cpp">
+      <Filter>guyframework\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\graphics\texture.cpp">
+      <Filter>guyframework\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\graphics\texturemanager.cpp">
+      <Filter>guyframework\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\graphics\vertexattribute.cpp">
+      <Filter>guyframework\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\graphics\camera2d.cpp">
+      <Filter>guyframework\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\graphics\color.cpp">
+      <Filter>guyframework\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\graphics\effect.cpp">
+      <Filter>guyframework\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\graphics\font.cpp">
+      <Filter>guyframework\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\graphics\framebuffer.cpp">
+      <Filter>guyframework\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\graphics\graphics.cpp">
+      <Filter>guyframework\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\graphics\mesh.cpp">
+      <Filter>guyframework\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\graphics\model.cpp">
+      <Filter>guyframework\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\graphics\primitives.cpp">
+      <Filter>guyframework\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\graphics\renderstate.cpp">
+      <Filter>guyframework\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\graphics\screen.cpp">
+      <Filter>guyframework\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\graphics\gui\texthud.cpp">
+      <Filter>guyframework\graphics\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\graphics\gui\frameshud.cpp">
+      <Filter>guyframework\graphics\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\input\controller.cpp">
+      <Filter>guyframework\input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\input\gamepad.cpp">
+      <Filter>guyframework\input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\input\input.cpp">
+      <Filter>guyframework\input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\input\keyboard.cpp">
+      <Filter>guyframework\input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\tools\particle.cpp">
+      <Filter>guyframework\extra</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\tools\particleemitter.cpp">
+      <Filter>guyframework\extra</Filter>
+    </ClCompile>
+    <ClCompile Include="..\guyframework\tools\transition.cpp">
+      <Filter>guyframework\extra</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
