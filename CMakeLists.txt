@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_C_STANDARD 11)
 
-set(RUNNER_CONFIGS Debug DebugAsan Release)
+set(RUNNER_CONFIGS Debug Release)
 
 get_property(_is_multi_config GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
 if(_is_multi_config)
@@ -20,13 +20,6 @@ else()
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS ${RUNNER_CONFIGS})
 endif()
 
-foreach(_lang C CXX)
-    set(CMAKE_${_lang}_FLAGS_DEBUGASAN "${CMAKE_${_lang}_FLAGS_DEBUG}")
-endforeach()
-set(CMAKE_EXE_LINKER_FLAGS_DEBUGASAN "${CMAKE_EXE_LINKER_FLAGS_DEBUG}")
-set(CMAKE_SHARED_LINKER_FLAGS_DEBUGASAN "${CMAKE_SHARED_LINKER_FLAGS_DEBUG}")
-set(CMAKE_STATIC_LINKER_FLAGS_DEBUGASAN "${CMAKE_STATIC_LINKER_FLAGS_DEBUG}")
-
 if(NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
     message(FATAL_ERROR "Runner only supports x64 builds.")
 endif()
@@ -34,20 +27,9 @@ endif()
 set(RUNNER_CLANG_CL FALSE)
 if(MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     set(RUNNER_CLANG_CL TRUE)
-
-    execute_process(
-        COMMAND "${CMAKE_CXX_COMPILER}" -print-resource-dir
-        OUTPUT_VARIABLE CLANG_RESOURCE_DIR
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
-    set(CLANG_ASAN_RUNTIME_LIB_DIR "${CLANG_RESOURCE_DIR}/lib/windows")
 endif()
 
-if(RUNNER_CLANG_CL)
-    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
-else()
-    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug,DebugAsan>:Debug>DLL")
-endif()
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
 
 option(RUNNER_UNITY_BUILD "Batch each target's sources into unity build translation units" ON)
 set(CMAKE_UNITY_BUILD ${RUNNER_UNITY_BUILD})
@@ -148,7 +130,7 @@ target_include_directories(runner PRIVATE
 )
 
 target_compile_definitions(runner PRIVATE
-    $<$<CONFIG:Debug,DebugAsan>:_DEBUG>
+    $<$<CONFIG:Debug>:_DEBUG>
 )
 
 target_link_libraries(runner PRIVATE
@@ -156,27 +138,11 @@ target_link_libraries(runner PRIVATE
     Runner::WarningsAsErrors
 )
 
+set_target_properties(runner PROPERTIES
+    VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+)
+
 if(MSVC AND NOT RUNNER_CLANG_CL)
     target_compile_options(runner PRIVATE /sdl)
-endif()
-
-if(MSVC AND NOT RUNNER_CLANG_CL)
-    target_compile_options(runner PRIVATE $<$<CONFIG:DebugAsan>:/fsanitize=address>)
-elseif(RUNNER_CLANG_CL)
-    target_compile_options(runner PRIVATE $<$<CONFIG:DebugAsan>:-fsanitize=address>)
-    target_link_options(runner PRIVATE $<$<CONFIG:DebugAsan>:-fsanitize=address>)
-
-    if(CMAKE_BUILD_TYPE STREQUAL "DebugAsan")
-        target_link_directories(runner PRIVATE ${CLANG_ASAN_RUNTIME_LIB_DIR})
-        target_link_libraries(runner PRIVATE
-            clang_rt.asan_dynamic-x86_64.lib
-            clang_rt.asan_dynamic_runtime_thunk-x86_64.lib
-        )
-        add_custom_command(TARGET runner POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                "${CLANG_ASAN_RUNTIME_LIB_DIR}/clang_rt.asan_dynamic-x86_64.dll"
-                "$<TARGET_FILE_DIR:runner>/clang_rt.asan_dynamic-x86_64.dll"
-        )
-    endif()
 endif()
 

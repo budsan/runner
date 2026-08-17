@@ -1,5 +1,8 @@
 build/
+out/
+.vs/
 vcpkg_installed/
 CMakeCache.txt
 CMakeFiles/
 CMakeUserPresets.json
+debug.txt

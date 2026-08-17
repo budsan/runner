@@ -71,7 +71,3 @@ target_compile_definitions(GuyFramework PUBLIC
 if(MSVC AND NOT RUNNER_CLANG_CL)
     target_compile_options(GuyFramework PRIVATE /sdl)
 endif()
-
-if(MSVC)
-    target_compile_options(GuyFramework PRIVATE $<$<CONFIG:DebugAsan>:$<IF:$<BOOL:${RUNNER_CLANG_CL}>,-fsanitize=address,/fsanitize=address>>)
-endif()

@@ -51,12 +51,6 @@
             "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
         },
         {
-            "name": "windows-ninja-msvc-debugasan",
-            "inherits": "ninja-msvc-base",
-            "displayName": "Windows - Ninja + MSVC DebugAsan",
-            "cacheVariables": { "CMAKE_BUILD_TYPE": "DebugAsan" }
-        },
-        {
             "name": "windows-ninja-msvc-release",
             "inherits": "ninja-msvc-base",
             "displayName": "Windows - Ninja + MSVC Release",
@@ -84,12 +78,6 @@
             "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
         },
         {
-            "name": "windows-clang-DebugAsan",
-            "inherits": "ninja-clangcl-base",
-            "displayName": "Windows - Ninja + clang-cl DebugAsan",
-            "cacheVariables": { "CMAKE_BUILD_TYPE": "DebugAsan" }
-        },
-        {
             "name": "windows-clang-Release",
             "inherits": "ninja-clangcl-base",
             "displayName": "Windows - Ninja + clang-cl Release",
@@ -100,10 +88,8 @@
         { "name": "windows-vs2022", "configurePreset": "windows-vs2022", "configuration": "Debug" },
         { "name": "windows-vs2022-v143", "configurePreset": "windows-vs2022-v143", "configuration": "Debug" },
         { "name": "windows-ninja-msvc-debug", "configurePreset": "windows-ninja-msvc-debug" },
-        { "name": "windows-ninja-msvc-debugasan", "configurePreset": "windows-ninja-msvc-debugasan" },
         { "name": "windows-ninja-msvc-release", "configurePreset": "windows-ninja-msvc-release" },
         { "name": "windows-clang-Debug", "configurePreset": "windows-clang-Debug" },
-        { "name": "windows-clang-DebugAsan", "configurePreset": "windows-clang-DebugAsan" },
         { "name": "windows-clang-Release", "configurePreset": "windows-clang-Release" }
     ]
 }
