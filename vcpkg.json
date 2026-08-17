@@ -1,0 +1,11 @@
+{
+    "name": "runner",
+    "version-string": "0.1.0",
+    "dependencies": [
+        "sdl2",
+        "freetype",
+        "libogg",
+        "libvorbis",
+        "openal-soft"
+    ]
+}

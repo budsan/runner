@@ -1,0 +1,109 @@
+{
+    "version": 4,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 20,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "base",
+            "hidden": true,
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+                "VCPKG_TARGET_TRIPLET": "x64-windows"
+            }
+        },
+        {
+            "name": "windows-vs2022",
+            "inherits": "base",
+            "displayName": "Windows - Visual Studio 17 2022 (v142)",
+            "description": "Multi-config VS2022 solution using the v142 (VS2019) MSVC toolset, matching the original .vcxproj files",
+            "generator": "Visual Studio 17 2022",
+            "architecture": "x64",
+            "toolset": "v142,host=x64"
+        },
+        {
+            "name": "windows-vs2022-v143",
+            "inherits": "base",
+            "displayName": "Windows - Visual Studio 17 2022 (v143)",
+            "description": "Multi-config VS2022 solution using the current v143 MSVC toolset",
+            "generator": "Visual Studio 17 2022",
+            "architecture": "x64",
+            "toolset": "v143,host=x64"
+        },
+        {
+            "name": "ninja-msvc-base",
+            "inherits": "base",
+            "hidden": true,
+            "displayName": "Base preset for Ninja + MSVC (cl.exe)",
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "cl.exe",
+                "CMAKE_CXX_COMPILER": "cl.exe"
+            }
+        },
+        {
+            "name": "windows-ninja-msvc-debug",
+            "inherits": "ninja-msvc-base",
+            "displayName": "Windows - Ninja + MSVC Debug",
+            "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
+        },
+        {
+            "name": "windows-ninja-msvc-debugasan",
+            "inherits": "ninja-msvc-base",
+            "displayName": "Windows - Ninja + MSVC DebugAsan",
+            "cacheVariables": { "CMAKE_BUILD_TYPE": "DebugAsan" }
+        },
+        {
+            "name": "windows-ninja-msvc-release",
+            "inherits": "ninja-msvc-base",
+            "displayName": "Windows - Ninja + MSVC Release",
+            "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
+        },
+        {
+            "name": "ninja-clangcl-base",
+            "inherits": "base",
+            "hidden": true,
+            "displayName": "Base preset for Ninja + clang-cl",
+            "description": "Uses the clang-cl/lld-link toolset bundled with the detected VS2022 install. Override CLANG_CL_BIN_DIR if clang-cl lives elsewhere.",
+            "generator": "Ninja",
+            "environment": {
+                "CLANG_CL_BIN_DIR": "C:/Program Files/Microsoft Visual Studio/2022/Professional/VC/Tools/Llvm/x64/bin"
+            },
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "$env{CLANG_CL_BIN_DIR}/clang-cl.exe",
+                "CMAKE_CXX_COMPILER": "$env{CLANG_CL_BIN_DIR}/clang-cl.exe"
+            }
+        },
+        {
+            "name": "windows-clang-Debug",
+            "inherits": "ninja-clangcl-base",
+            "displayName": "Windows - Ninja + clang-cl Debug",
+            "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
+        },
+        {
+            "name": "windows-clang-DebugAsan",
+            "inherits": "ninja-clangcl-base",
+            "displayName": "Windows - Ninja + clang-cl DebugAsan",
+            "cacheVariables": { "CMAKE_BUILD_TYPE": "DebugAsan" }
+        },
+        {
+            "name": "windows-clang-Release",
+            "inherits": "ninja-clangcl-base",
+            "displayName": "Windows - Ninja + clang-cl Release",
+            "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
+        }
+    ],
+    "buildPresets": [
+        { "name": "windows-vs2022", "configurePreset": "windows-vs2022", "configuration": "Debug" },
+        { "name": "windows-vs2022-v143", "configurePreset": "windows-vs2022-v143", "configuration": "Debug" },
+        { "name": "windows-ninja-msvc-debug", "configurePreset": "windows-ninja-msvc-debug" },
+        { "name": "windows-ninja-msvc-debugasan", "configurePreset": "windows-ninja-msvc-debugasan" },
+        { "name": "windows-ninja-msvc-release", "configurePreset": "windows-ninja-msvc-release" },
+        { "name": "windows-clang-Debug", "configurePreset": "windows-clang-Debug" },
+        { "name": "windows-clang-DebugAsan", "configurePreset": "windows-clang-DebugAsan" },
+        { "name": "windows-clang-Release", "configurePreset": "windows-clang-Release" }
+    ]
+}
